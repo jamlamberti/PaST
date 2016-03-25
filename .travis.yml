@@ -8,7 +8,7 @@ before_install:
     - sudo apt-get install gcc-5 g++-5 -y
 
 script:
-    - export travis=1
+    - export TRAVIS=1
     - make
     - bin/main
 
