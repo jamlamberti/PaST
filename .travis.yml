@@ -1,0 +1,12 @@
+language: C
+cache: apt
+
+before_install:
+    - sudo apt-get install build-essentials -y
+    - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
+    - sudo apt-get update -q
+    - sudo apt-get install gcc-5.3 -y
+
+script:
+    - make
+    - bin/main
