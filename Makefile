@@ -2,6 +2,9 @@ SDIR = src
 ODIR = bin
 CXXFILES = time_series
 CXX = g++
+ifeq ($(TRAVIS), 1)
+	CXX = g++-5
+endif
 CXXFLAGS = -std=c++11 -O3 -fcilkplus
 LDFLAGSS = -lm
 
