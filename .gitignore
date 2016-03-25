@@ -4,3 +4,4 @@
 *.swp
 *~
 bin
+switch_gcc.sh
