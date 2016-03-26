@@ -1,12 +1,12 @@
 SDIR = src
 ODIR = bin
-CXXFILES = time_series
+CXXFILES = time_series main
 CXX = g++
 ifeq ($(TRAVIS), 1)
 	CXX = g++-5
 endif
-CXXFLAGS = -std=c++11 -O3 -fcilkplus
-LDFLAGSS = -lm
+CXXFLAGS = -DTESTING -std=c++11 -O3 -fcilkplus -I googletest/googletest/include
+LDFLAGS = googletest/googlemock/gtest/libgtest.a googletest/googlemock/gtest/libgtest_main.a -lm
 
 TARGET = $(ODIR)/main
 

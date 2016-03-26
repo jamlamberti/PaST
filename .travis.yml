@@ -2,10 +2,12 @@ language: C
 cache: apt
 
 before_install:
-    - sudo apt-get install build-essential cppcheck -y
+    - sudo apt-get install build-essential cppcheck git -y
     - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     - sudo apt-get update -q
     - sudo apt-get install gcc-5 g++-5 -y
+    - git clone https://github.com/google/googletest.git
+    - cmake -DBUILD_SHARED_LIBS=on . && make
 
 script:
     - export TRAVIS=1
