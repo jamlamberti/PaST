@@ -1,6 +1,6 @@
 SDIR = src
 ODIR = bin
-CXXFILES = time_series main
+CXXFILES = main time_series linear_regression
 CXX = g++
 ifeq ($(TRAVIS), 1)
 	CXX = g++-5
