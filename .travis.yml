@@ -8,6 +8,7 @@ before_install:
     - sudo apt-get install gcc-5 g++-5 -y
     - git clone https://github.com/google/googletest.git
     - cd googletest && cmake . && make && cd ..
+    - gem install coveralls-lcov
 
 script:
     - export TRAVIS=1
@@ -16,3 +17,7 @@ script:
 
 after_success:
     - cppcheck src/ --error-exitcode=1
+    - lcov --directory . --capture --output-file coverage.info
+    - lcov -- remove coverage.info '/usr/*' 'googletest/*' --ouput-file coverage.info
+    - lcov --list coverage.info
+    - coveralls-lcov coverage.info
