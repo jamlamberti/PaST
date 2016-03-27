@@ -22,7 +22,10 @@ PriceSimulation::~PriceSimulation()
 
 void PriceSimulation::run_simulation()
 {
-    run_simulation(100, 500);
+    unsigned int num_traces = 100;
+    unsigned int num_steps = 500;
+    std::cout << " [+] Using defaults of: (" << num_traces << ", " << num_steps << ")"  << std::endl;
+    run_simulation(num_traces, num_steps);
 }
 
 void PriceSimulation::run_simulation(unsigned int num_traces, unsigned int num_steps)
@@ -34,4 +37,10 @@ TEST(PriceSimulation, UnitTest)
 {
     PriceSimulation ps(1.0, 1.5, 10);
     ps.run_simulation();
+}
+
+TEST(PriceSimulation, NoArg)
+{
+    PriceSimulation ps;
+    ps.run_simulation(10, 5);
 }

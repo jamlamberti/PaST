@@ -6,3 +6,5 @@
 bin
 switch_gcc.sh
 googletest
+reports
+coverage.info
