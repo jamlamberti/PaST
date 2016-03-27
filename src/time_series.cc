@@ -43,7 +43,7 @@ double TimeSeries::compute_mean()
 
 double TimeSeries::compute_stddev()
 {
-    return compute_stddev(0);
+    return TimeSeries::compute_stddev(0);
 }
 
 double TimeSeries::compute_stddev(int ddof)
@@ -53,7 +53,7 @@ double TimeSeries::compute_stddev(int ddof)
         TimeSeries::compute_mean();
     }
 
-    cilk::reducer< cilk::op_add<double> > square_error(0);
+    cilk::reducer< cilk::op_add<double> > square_error(0.0);
     auto end = values.end();
     cilk_for(auto i = values.begin(); i < end; i++)
     {
@@ -61,6 +61,47 @@ double TimeSeries::compute_stddev(int ddof)
     }
     std_dev = sqrt(square_error.get_value()/(values.size()-ddof));
     return std_dev;
+}
+
+std::vector<double> TimeSeries::compute_returns()
+{
+    return TimeSeries::compute_returns(1);
+}
+
+std::vector<double> TimeSeries::compute_returns(int period)
+{
+    std::vector<double> returns;
+    int end = values.size();
+    for(int i=period; i < end; i++)
+    {
+        returns.push_back(values.at(i)/values.at(i-period) - 1);
+    }
+    return returns;
+}
+
+double TimeSeries::compute_skewness(int ddof)
+{
+    double sigma = TimeSeries::compute_stddev(ddof);
+
+    cilk::reducer< cilk::op_add<double> > cubic_error(0.0);
+    auto end = values.end();
+    cilk_for(auto i = values.begin(); i < end; i++)
+    {
+        *cubic_error += pow(*i-mean, 3);
+    }
+    return cubic_error.get_value()/(pow(sigma, 3)*(values.size() - ddof));
+}
+
+double TimeSeries::compute_kurtosis(int ddof)
+{
+    double sigma = TimeSeries::compute_stddev(ddof);
+    cilk::reducer< cilk::op_add<double> > quartic_error(0.0);
+    auto end = values.end();
+    cilk_for(auto i = values.begin(); i < end; i++)
+    {
+        *quartic_error += pow(*i-mean, 4);
+    }
+    return quartic_error.get_value()/(pow(sigma, 4)*(values.size() - ddof));
 }
 
 TEST(TimeSeriesStats, ComputeMeanStd)

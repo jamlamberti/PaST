@@ -20,16 +20,21 @@ void GBMSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps
     std::mt19937 generator(trace_id*num_steps);
     std::normal_distribution<> normal(0, 1);
 
-    std::vector<double> trace;
-    trace.push_back(starting_price);
+    std::vector<double> returns;
+    
+    double prev = starting_price;
+    double curr;
     double dt = 1.0/num_steps;
     double variance = pow(std_dev, 2);
+    
     for (unsigned int i = 1; i < num_steps; i++)
     {
-        trace.push_back(trace.at(i-1)*exp(
-            (short_rate - 0.5*variance)*dt + std_dev*sqrt(dt)*normal(generator)));
+        curr = prev*exp((short_rate - 0.5*variance)*dt + std_dev*sqrt(dt)*normal(generator));
+        returns.push_back(curr/prev);
     }
-    TimeSeries ts(trace);
+
+
+    TimeSeries ts(returns);
     double ts_mean = ts.compute_mean();
     double ts_std  = ts.compute_stddev();
     std::cout << ts_mean << " " << ts_std << std::endl;

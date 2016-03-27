@@ -23,5 +23,9 @@ class TimeSeries
         double compute_mean();
         double compute_stddev();
         double compute_stddev(int);
+        std::vector<double> compute_returns();
+        std::vector<double> compute_returns(int);
+        double compute_skewness(int);
+        double compute_kurtosis(int);
 };
 #endif
