@@ -2,7 +2,7 @@ language: C
 cache: apt
 
 before_install:
-    - sudo apt-get install build-essential cppcheck git -y
+    - sudo apt-get install build-essential cppcheck git lcov -y
     - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     - sudo apt-get update -q
     - sudo apt-get install gcc-5 g++-5 -y
