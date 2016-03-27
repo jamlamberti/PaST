@@ -18,6 +18,8 @@ class TimeSeries
         TimeSeries();
         TimeSeries(std::vector<double> vals);
         ~TimeSeries();
+        void add_data(double);
+        void extend(std::vector<double> vals);
         double compute_mean();
         double compute_stddev();
 };

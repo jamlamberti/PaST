@@ -9,9 +9,9 @@ int linear_regression(std::vector<double> *x, std::vector<double> *y, double* m,
     CILK_DOUBLE cilk_sum_xx(0.0);
     CILK_DOUBLE cilk_sum_yy(0.0);
 
-    double sum_x, sum_y, sum_xy, sum_xx, sum_yy;
+    double sum_x, sum_y, sum_xy, sum_xx;
 
-    int end = x->size();
+    unsigned int end = x->size();
     if (end != y->size())
     {
         #ifndef TESTING
@@ -20,7 +20,7 @@ int linear_regression(std::vector<double> *x, std::vector<double> *y, double* m,
         return 1;
     }
 
-    cilk_for(int i = 0; i < end; i++)
+    cilk_for(unsigned int i = 0; i < end; i++)
     {
         *cilk_sum_x += x->at(i);
         *cilk_sum_xx += pow(x->at(i), 2);
@@ -31,7 +31,6 @@ int linear_regression(std::vector<double> *x, std::vector<double> *y, double* m,
     sum_x  = cilk_sum_x.get_value();
     sum_xx = cilk_sum_xx.get_value();
     sum_xy = cilk_sum_xy.get_value();
-    sum_yy = cilk_sum_yy.get_value();
     sum_y  = cilk_sum_y.get_value();
     double denom = end*sum_xx - pow(sum_x, 2);
     if (denom == 0.0)
@@ -76,6 +75,7 @@ TEST(LinearRegression, PerfectFit)
     double m = 0;
     double b = 0;
     int res = linear_regression(&x, &y, &m, &b);
+    EXPECT_EQ(res, 0);
     EXPECT_EQ(m, 1);
     EXPECT_EQ(b, -1);
 }
@@ -87,6 +87,7 @@ TEST(LinearRegression, ImperfectFit)
     double m = 0;
     double b = 0;
     int res = linear_regression(&x, &y, &m, &b);
+    EXPECT_EQ(res, 0);
     EXPECT_LE( abs(m-1.0726), 0.0001);
     EXPECT_LT( abs(b+0.9194), 0.0001);
 }
