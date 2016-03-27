@@ -1,12 +1,4 @@
-#include <iostream>
-#include <vector>
-#include <cmath>
-#include <cassert>
-#include <cilk/cilk.h>
-#include <cilk/reducer_opadd.h>
-#include <gtest/gtest.h>
-
-#define CILK_DOUBLE cilk::reducer< cilk::op_add<double> >
+#include "linear_regression.h"
 
 int linear_regression(std::vector<double> *x, std::vector<double> *y, double* m, double* b)
 {

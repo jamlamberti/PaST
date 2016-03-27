@@ -1,12 +1,12 @@
 SDIR = src
 ODIR = bin
-CXXFILES = main time_series linear_regression
+CXXFILES = main time_series linear_regression price_simulation gbm_simulation
 CXX = g++
 ifeq ($(TRAVIS), 1)
 	CXX = g++-5
 endif
-CXXFLAGS = -DTESTING -std=c++11 -O3 -fcilkplus -I googletest/googletest/include --coverage
-LDFLAGS = googletest/googlemock/gtest/libgtest.a googletest/googlemock/gtest/libgtest_main.a -lm -lgcov
+CXXFLAGS = -DTESTING -std=c++11 -O3 -fcilkplus -I googletest/googletest/include  -I src/include --coverage
+LDFLAGS = googletest/googlemock/gtest/libgtest.a googletest/googlemock/gtest/libgtest_main.a -lm
 
 TARGET = $(ODIR)/main
 
