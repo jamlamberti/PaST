@@ -43,6 +43,11 @@ double TimeSeries::compute_mean()
 
 double TimeSeries::compute_stddev()
 {
+    return compute_stddev(0);
+}
+
+double TimeSeries::compute_stddev(int ddof)
+{
     if (mean == 0.0)
     {
         TimeSeries::compute_mean();
@@ -54,7 +59,7 @@ double TimeSeries::compute_stddev()
     {
         *square_error += pow(*i-mean, 2);
     }
-    std_dev = sqrt(square_error.get_value()/values.size());
+    std_dev = sqrt(square_error.get_value()/(values.size()-ddof));
     return std_dev;
 }
 

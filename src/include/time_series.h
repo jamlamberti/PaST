@@ -22,5 +22,6 @@ class TimeSeries
         void extend(std::vector<double> vals);
         double compute_mean();
         double compute_stddev();
+        double compute_stddev(int);
 };
 #endif
