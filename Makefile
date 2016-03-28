@@ -1,6 +1,6 @@
 SDIR = src
 ODIR = bin
-CXXFILES = main time_series linear_regression price_simulation gbm_simulation
+CXXFILES = main time_series linear_regression price_simulation gbm_simulation sqrt_diffusion_simulation
 CXX = g++
 ifeq ($(TRAVIS), 1)
 	CXX = g++-5
