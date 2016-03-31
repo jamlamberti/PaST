@@ -1,5 +1,4 @@
 language: C
-cache: apt
 
 before_install:
     - sudo apt-get install build-essential cppcheck git lcov -y
