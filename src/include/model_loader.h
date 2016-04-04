@@ -1,5 +1,5 @@
-#ifndef PAST_LINEAR_REGRESSION_H_
-#define PAST_LINEAR_REGRESSION_H_
+#ifndef PAST_MODEL_LOADER_H_
+#define PAST_MODEL_LOADER_H_
 
 #include <iostream>
 #include <vector>
