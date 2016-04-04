@@ -43,16 +43,14 @@ bool ModelLoader::load_model(std::string model_file)
         for (int i = 0; i < num_stocks; i++)
         {
             stocks->emplace_back(stocks_s[i].c_str());
-            // std::cout << stocks_s[i].c_str() << " ";
         }
-        // std::cout << std::endl;
     }
     catch (const libconfig::SettingNotFoundException &nfex)
     {
         std::cerr << "Stocks must be defined in the model" << std::endl;
         return false;
     }
-    
+
     try
     {
         const libconfig::Setting &factors_s = root["factors"];
