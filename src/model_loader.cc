@@ -64,6 +64,6 @@ bool ModelLoader::load_model(std::string model_file)
 TEST(ModelLoader, ModelLoadParser)
 {
     ModelLoader ml;
-    bool rv = ml.load_model("/home/jlamberti/proj/PaST/models/sample.mod");
+    bool rv = ml.load_model("models/sample.mod");
     EXPECT_EQ(rv, true);
 }
