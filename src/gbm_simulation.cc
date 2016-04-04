@@ -33,8 +33,7 @@ void GBMSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps
         returns.push_back(curr/prev);
     }
 
-
-    TimeSeries ts(returns);
+    //TimeSeries ts(returns);
     // double ts_mean = ts.compute_mean();
     // double ts_std  = ts.compute_stddev();
     //std::cout << ts_mean << " " << ts_std << std::endl;
