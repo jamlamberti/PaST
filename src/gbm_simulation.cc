@@ -16,7 +16,7 @@ void GBMSimulation::run_simulation(unsigned int num_traces, unsigned int num_ste
 
 void GBMSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps)
 {
-    std::cout << " [+] Running trace: " << trace_id << std::endl;
+    //std::cout << " [+] Running trace: " << trace_id << std::endl;
     std::mt19937 generator(trace_id*num_steps);
     std::normal_distribution<> normal(0, 1);
 
@@ -35,9 +35,9 @@ void GBMSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps
 
 
     TimeSeries ts(returns);
-    double ts_mean = ts.compute_mean();
-    double ts_std  = ts.compute_stddev();
-    std::cout << ts_mean << " " << ts_std << std::endl;
+    // double ts_mean = ts.compute_mean();
+    // double ts_std  = ts.compute_stddev();
+    //std::cout << ts_mean << " " << ts_std << std::endl;
 }
 
 TEST(GBMSimulation, UnitTest)
