@@ -1,4 +1,4 @@
-language: C
+language: C++
 
 before_install:
     - sudo apt-get install build-essential cppcheck git lcov libconfig++-dev -y
