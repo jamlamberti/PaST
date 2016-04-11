@@ -9,7 +9,7 @@ before_install:
     - gem install coveralls-lcov
 
 script:
-    - make TRAVIS=1
+    - make TESTING=1
     - bin/main
 
 after_success:
