@@ -4,14 +4,18 @@ before_install:
     - sudo apt-get install build-essential cppcheck git lcov -y
     - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     - sudo apt-get update -q
-    - sudo apt-get install gcc-5 g++-5 -y
+    - sudo apt-get install gcc-5 g++-5 libconfig++-dev -y
     - ./install_gtest.sh
-    - ./install_libconfig.sh
+    #- ./install_libconfig.sh
     - gem install coveralls-lcov
 
 script:
     - make TESTING=1
     - bin/main
+
+after_failure:
+    - g++ -o libconfig_test src/libcfg_test.cpp -lconfig++
+    - ./libconfig_test
 
 after_success:
     - cppcheck src/ --error-exitcode=1
