@@ -86,6 +86,44 @@ bool ModelLoader::load_model(std::string model_file)
         return false;
     }
 
+    try
+    {
+        const libconfig::Setting &stock_fi = root["stockfiles"];
+        if (stock_fi.getLength() != num_stocks)
+        {
+            std::cerr << "Stocks must have the same size as stockfiles" << std::endl;
+            return false;
+        }
+        
+        for (int i = 0; i < num_stocks; i++)
+        {
+            stock_files.emplace_back(stock_fi[i].c_str());
+        }
+    } catch (const libconfig::SettingNotFoundException &nfex)
+    {
+        std::cerr << "Stockfiles must be defined in the model" << std::endl;
+        return false;
+    }
+
+    try
+    {
+        const libconfig::Setting &factor_fi = root["factorfiles"];
+        if (factor_fi.getLength() != num_factors)
+        {
+            std::cerr << "Factor must have the same size as factorfiles" << std::endl;
+            return false;
+        }
+
+        for (int i = 0; i < num_factors; i++)
+        {
+            factor_files.emplace_back(factor_fi[i].c_str());
+        }
+    } catch (const libconfig::SettingNotFoundException &nfex)
+    {
+        std::cerr << "Factorfiles must be defined in the model" << std::endl;
+        return false;
+    }
+
     std::cout << " [+] Successfully loaded " << num_stocks << " stocks and " << num_factors << " factors" << std::endl;
 
     return true;
