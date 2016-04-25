@@ -2,16 +2,10 @@
 
 ModelLoader::ModelLoader()
 {
-    stocks = new std::vector<std::string>();
-    factors = new std::vector<std::string>();
-    factor_models = new std::vector< std::vector<double> >();
 }
 
 ModelLoader::~ModelLoader()
 {
-    delete(stocks);
-    delete(factors);
-    delete(factor_models);
 }
 
 bool ModelLoader::load_model(std::string model_file)
@@ -42,7 +36,7 @@ bool ModelLoader::load_model(std::string model_file)
         num_stocks = stocks_s.getLength();
         for (int i = 0; i < num_stocks; i++)
         {
-            stocks->emplace_back(stocks_s[i].c_str());
+            stocks.emplace_back(stocks_s[i].c_str());
         }
     }
     catch (const libconfig::SettingNotFoundException &nfex)
@@ -57,7 +51,7 @@ bool ModelLoader::load_model(std::string model_file)
         num_factors = factors_s.getLength();
         for (int i = 0; i < num_factors; i++)
         {
-            factors->emplace_back(factors_s[i].c_str());
+            factors.emplace_back(factors_s[i].c_str());
         }
     }
     catch (const libconfig::SettingNotFoundException &nfex)
@@ -68,7 +62,7 @@ bool ModelLoader::load_model(std::string model_file)
 
     try
     {
-        for (auto it = stocks->cbegin(); it < stocks->cend(); it++)
+        for (auto it = stocks.cbegin(); it < stocks.cend(); it++)
         {
             const libconfig::Setting &factor = root[*it];
             int num_bench = factor.getLength();
@@ -83,7 +77,7 @@ bool ModelLoader::load_model(std::string model_file)
             {
                 fm.emplace_back((double)factor[i]);
             }
-            factor_models->emplace_back(fm);
+            factor_models.emplace_back(fm);
         }
     }
     catch (const libconfig::SettingNotFoundException &nfex)

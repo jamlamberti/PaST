@@ -7,13 +7,17 @@
 #include <cassert>
 #include <gtest/gtest.h>
 #include "model_loader.h"
+#include "stock.h"
 
 class Simulator
 {
-    ModelLoader model;
+    ModelLoader* model;
+    std::vector<Stock> benchmarks;
     public:
-        Simulator(ModelLoader);
+        Simulator(ModelLoader*);
         ~Simulator();
+        void model_benchmarks();
+        void simulate_benchmarks();
 };
 
 #endif
