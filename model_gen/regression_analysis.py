@@ -16,11 +16,12 @@ def load_benchmark(benchmark_file):
     """Load a benchmark from a file"""
     benchmark_dict = {}
     with open(benchmark_file, 'r') as f_handle:
-        csv_file = csv.reader(f_handle)
+        #csv_file = csv.reader(f_handle)
+        csv_file = csv.DictReader(f_handle)
 
         for row in csv_file:
             benchmark_dict[datetime.datetime.strptime(
-                row[0], '%Y-%m-%d').date()] = row[1]
+                row['DATE'], '%Y-%m-%d').date()] = row['VALUE']
 
     benchmark = []
 
@@ -91,7 +92,7 @@ def model_stock(ticker, start_date, end_date):
             datetime.datetime.strptime(row['Date'], '%Y-%m-%d').date())
         data.append(float(row['Adj_Close']))
     benchmarks = {}
-    for root, _, files in os.walk(os.path.abspath('data')):
+    for root, _, files in os.walk(os.path.abspath('fred')):
         for data_file in files:
             benchmarks[os.path.basename(data_file)] = wrap_benchmark(
                 os.path.join(root, data_file),
