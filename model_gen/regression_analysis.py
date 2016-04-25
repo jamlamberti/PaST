@@ -1,3 +1,4 @@
+import os
 import csv
 import datetime
 from collections import defaultdict
@@ -49,8 +50,8 @@ def wrap_benchmark(benchmark_file, dates):
     bd_dates = sorted(b_d.keys())
 
     for d in dates:
-        target = d + \
-            min([di - d for di in bd_dates if (di - d) == abs(di - d)])
+        target = d - \
+            min([d - di for di in bd_dates if (d - di) == abs(di - d)])
         benchmark_data[d] = b_d[target]
 
     return benchmark_data
@@ -62,15 +63,35 @@ def download_data(ticker, start_date, end_date):
     return share.get_historical(start_date, end_date)
 
 
+def run_regression(ticker_pricing, benchmarks, dates):
+    lr = linear_model.LinearRegression()
+    benchmark_data = []
+    for key in sorted(benchmarks.keys()):
+        benchmark_data.append([benchmarks[key][di] for di in dates])
+
+    benchmark_data = np.asmatrix(benchmark_data).T
+    lr.fit(benchmark_data, ticker_pricing)
+    
+    print lr.coef_, lr.intercept_
+
 def model_stock(ticker, start_date, end_date):
     """Model a stock"""
     dates = []
     data = []
 
     raw_data = download_data(ticker, start_date, end_date)
+
     for row in sorted(
             raw_data,
             key=lambda x: datetime.datetime.strptime(x['Date'], '%Y-%m-%d')):
         dates.append(
             datetime.datetime.strptime(row['Date'], '%Y-%m-%d').date())
         data.append(float(row['Adj_Close']))
+    wti = wrap_benchmark(os.path.join('data', 'wti_spot_prices.csv'), dates)
+    recession =  wrap_benchmark(os.path.join('data', 'Smoothed_US_Recession_Probabilities.csv'), dates)
+    run_regression(data, {'wti': wti, 'recession': recession}, dates)
+    #assert sorted(wti.keys()) == sorted(recession.keys())
+
+
+if __name__ == '__main__':
+    model_stock('WMT', '2014-03-01', '2016-03-01')
