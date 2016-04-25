@@ -10,11 +10,11 @@
 
 class ModelLoader
 {
-    std::vector<std::string>* stocks;
-    std::vector<std::string>* factors;
-    std::vector< std::vector<double> >* factor_models;
 
     public:
+        std::vector<std::string>* stocks;
+        std::vector<std::string>* factors;
+        std::vector< std::vector<double> >* factor_models;
         ModelLoader();
         ~ModelLoader();
         bool load_model(std::string);
