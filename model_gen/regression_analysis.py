@@ -16,7 +16,7 @@ def load_benchmark(benchmark_file):
     """Load a benchmark from a file"""
     benchmark_dict = {}
     with open(benchmark_file, 'r') as f_handle:
-        #csv_file = csv.reader(f_handle)
+        # csv_file = csv.reader(f_handle)
         csv_file = csv.DictReader(f_handle)
 
         for row in csv_file:
@@ -33,14 +33,16 @@ def load_benchmark(benchmark_file):
         try:
             benchmark_dict[row[0]] = float(benchmark[i])
         except ValueError:
-            try:
-                benchmark[i] = (
-                    float(benchmark[i - 1]) + float(benchmark[i + 1])) / 2
-                benchmark_dict[row[0]] = benchmark[i]
-            except ValueError:
-                benchmark[i] = (
-                    float(benchmark[i - 1]) + float(benchmark[i + 2])) / 2
-                benchmark_dict[row[0]] = benchmark[i]
+            cnt = 1
+            while True:
+                try:
+                    benchmark[i] = (
+                        float(benchmark[i - 1]) + float(benchmark[i + cnt])) / 2
+                    benchmark_dict[row[0]] = benchmark[i]
+                except ValueError:
+                    cnt += 1
+                else:
+                    break
     return benchmark_dict
 
 
@@ -92,11 +94,15 @@ def model_stock(ticker, start_date, end_date):
             datetime.datetime.strptime(row['Date'], '%Y-%m-%d').date())
         data.append(float(row['Adj_Close']))
     benchmarks = {}
-    for root, _, files in os.walk(os.path.abspath('fred')):
+    for root, _, files in os.walk(os.path.abspath('data')):
         for data_file in files:
-            benchmarks[os.path.basename(data_file)] = wrap_benchmark(
-                os.path.join(root, data_file),
-                dates)
+            try:
+                benchmarks[os.path.basename(data_file)] = wrap_benchmark(
+                   os.path.join(root, data_file),
+                    dates)
+            except Exception, e:
+                print e
+                print data_file
     run_regression(data, benchmarks, dates)
 
 
