@@ -42,9 +42,18 @@ def load_benchmark(benchmark_file):
     return benchmark_dict
 
 
-def wrap_benchmark(benchmark_file, freq, dates):
-    #benchmark_data = {d: None for d in dates}
-    pass
+def wrap_benchmark(benchmark_file, dates):
+    """Handle the different frequencies"""
+    benchmark_data = {}
+    b_d = load_benchmark(benchmark_file)
+    bd_dates = sorted(b_d.keys())
+
+    for d in dates:
+        target = d + \
+            min([di - d for di in bd_dates if (di - d) == abs(di - d)])
+        benchmark_data[d] = b_d[target]
+
+    return benchmark_data
 
 
 def download_data(ticker, start_date, end_date):
