@@ -18,7 +18,7 @@ int main(int argc, char** argv)
     ModelLoader ml;
     for (int i = 1; i < argc; i++)
     {
-        std::cout << " [-] Running Model " << argv[i] << std::endl;
+        std::cout << " [+] Running Model " << argv[i] << std::endl;
         run_model(argv[i]);
     }
     return 0;
