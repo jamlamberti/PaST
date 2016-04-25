@@ -49,10 +49,11 @@ def wrap_benchmark(benchmark_file, dates):
     b_d = load_benchmark(benchmark_file)
     bd_dates = sorted(b_d.keys())
 
-    for d in dates:
-        target = d - \
-            min([d - di for di in bd_dates if (d - di) == abs(di - d)])
-        benchmark_data[d] = b_d[target]
+    for date in dates:
+        target = date - \
+            min([date - di for di in bd_dates if (
+                date - di) == abs(di - date)])
+        benchmark_data[date] = b_d[target]
 
     return benchmark_data
 
@@ -64,15 +65,17 @@ def download_data(ticker, start_date, end_date):
 
 
 def run_regression(ticker_pricing, benchmarks, dates):
-    lr = linear_model.LinearRegression()
+    """Run a Regression Model"""
+    clr = linear_model.LinearRegression()
     benchmark_data = []
     for key in sorted(benchmarks.keys()):
         benchmark_data.append([benchmarks[key][di] for di in dates])
 
     benchmark_data = np.asmatrix(benchmark_data).T
-    lr.fit(benchmark_data, ticker_pricing)
-    
-    print lr.coef_, lr.intercept_
+    clr.fit(benchmark_data, ticker_pricing)
+
+    print clr.coef_, clr.intercept_
+
 
 def model_stock(ticker, start_date, end_date):
     """Model a stock"""
@@ -87,10 +90,13 @@ def model_stock(ticker, start_date, end_date):
         dates.append(
             datetime.datetime.strptime(row['Date'], '%Y-%m-%d').date())
         data.append(float(row['Adj_Close']))
-    wti = wrap_benchmark(os.path.join('data', 'wti_spot_prices.csv'), dates)
-    recession =  wrap_benchmark(os.path.join('data', 'Smoothed_US_Recession_Probabilities.csv'), dates)
-    run_regression(data, {'wti': wti, 'recession': recession}, dates)
-    #assert sorted(wti.keys()) == sorted(recession.keys())
+    benchmarks = {}
+    for root, _, files in os.walk(os.path.abspath('data')):
+        for data_file in files:
+            benchmarks[os.path.basename(data_file)] = wrap_benchmark(
+                os.path.join(root, data_file),
+                dates)
+    run_regression(data, benchmarks, dates)
 
 
 if __name__ == '__main__':
