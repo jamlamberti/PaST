@@ -77,7 +77,7 @@ def run_regression(ticker_pricing, benchmarks, dates):
     benchmark_data = np.asmatrix(benchmark_data).T
     clr.fit(benchmark_data, ticker_pricing)
 
-    print clr.coef_, clr.intercept_
+    return clr.coef_, clr.intercept_
 
 
 def model_stock(ticker, start_date, end_date):
@@ -97,13 +97,23 @@ def model_stock(ticker, start_date, end_date):
     for root, _, files in os.walk(os.path.abspath('data')):
         for data_file in files:
             try:
-                benchmarks[os.path.basename(data_file)] = wrap_benchmark(
+                benchmarks[os.path.splitext(os.path.basename(data_file))[0]] = wrap_benchmark(
                    os.path.join(root, data_file),
                     dates)
             except Exception, e:
                 print e
                 print data_file
-    run_regression(data, benchmarks, dates)
+    coef, intercept = run_regression(data, benchmarks, dates)
+    #print coef, intercept
+    print '%s = [%s, %0.6f]'%(ticker, ", ".join(map(lambda x: '%0.6f'%x, coef)), intercept)
+    # Export the model
+
+    with open('models/test_model.mod', 'w') as f_handle:
+        f_handle.write('stocks = ["%s"];\n'%ticker)
+        f_handle.write('stockfiles = ["model/%s_data.dat"];\n'%ticker)
+        f_handle.write('factors = ["%s"];\n'%'", "'.join(sorted(benchmarks.keys())))
+        f_handle.write('factorfiles = ["%s"];\n'%'", "'.join([os.path.join('model', '%s.dat'%x) for x in sorted(benchmarks.keys())]))
+        f_handle.write('%s = [%s, %0.6f]'%(ticker, ", ".join(map(lambda x: '%0.6f'%x, coef)), intercept))
 
 
 if __name__ == '__main__':
