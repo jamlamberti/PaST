@@ -12,7 +12,7 @@
 class Simulator
 {
     ModelLoader* model;
-    std::vector<Stock> benchmarks;
+    std::vector<Stock*> benchmarks;
     public:
         Simulator(ModelLoader*);
         ~Simulator();

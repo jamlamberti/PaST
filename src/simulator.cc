@@ -8,7 +8,10 @@ Simulator::Simulator(ModelLoader* ml)
 
 Simulator::~Simulator()
 {
-    // Do nothing for now
+    for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
+    {
+        delete(*it);
+    }
 }
 
 
@@ -16,15 +19,16 @@ void Simulator::model_benchmarks()
 {
     benchmarks.clear();
     // push onto benchmarks vector
-    //for (auto it = ml.factors->begin(); it != ml.factors->cend(); it++)
-    //{
-    //    Stock s = new Stock(*it,  
-    //    benchmarks.push_back(
-    //}
+    int cnt = 0;
+    for (auto it = model->factors.begin(); it != model->factors.cend(); it++)
+    {
+        Stock* s = new Stock(*it, model->factor_files.at(cnt++));
+        benchmarks.push_back(s);
+    }
 }
 
 
 void Simulator::simulate_benchmarks()
 {
-    // simulate over each of the benchmark vector elements    
+    // simulate over each of the benchmark vector elements
 }

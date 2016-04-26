@@ -6,6 +6,8 @@ void run_model(char* model_file)
     ml.load_model(model_file);
     
     // Simulate the bechmarks
+    Simulator sim(&ml);
+    sim.model_benchmarks();
 }
 
 int main(int argc, char** argv)
