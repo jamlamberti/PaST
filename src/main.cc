@@ -8,6 +8,7 @@ void run_model(char* model_file)
     // Simulate the bechmarks
     Simulator sim(&ml);
     sim.model_benchmarks();
+    sim.simulate_benchmarks();
 }
 
 int main(int argc, char** argv)

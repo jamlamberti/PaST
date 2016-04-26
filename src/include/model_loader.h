@@ -16,7 +16,7 @@ class ModelLoader
         std::vector<std::string> stock_files;
         std::vector<std::string> factors;
         std::vector<std::string> factor_files;
-        std::vector< std::vector<double>> factor_models;
+        std::vector< std::vector<double> > factor_models;
         ModelLoader();
         ~ModelLoader();
         bool load_model(std::string);

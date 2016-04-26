@@ -12,7 +12,6 @@ class GBMSimulation : public PriceSimulation
 {
     protected:
         double short_rate;
-        void simulate_trace(unsigned int trace_id, unsigned int num_steps);
 
     public:
         GBMSimulation(double mu, double sigma, double starting, double csr) : PriceSimulation(mu, sigma, starting)
@@ -22,6 +21,7 @@ class GBMSimulation : public PriceSimulation
 
         void run_simulation();
         void run_simulation(unsigned int num_traces, unsigned int num_steps);
+        std::vector<double> simulate_trace(unsigned int trace_id, unsigned int num_steps);
 };
 
 #endif
