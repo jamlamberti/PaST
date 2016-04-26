@@ -8,11 +8,12 @@
 #include <gtest/gtest.h>
 #include "model_loader.h"
 #include "stock.h"
+#include "gbm_simulation.h"
 
 class Simulator
 {
     ModelLoader* model;
-    std::vector<Stock*> benchmarks;
+    std::vector<GBMSimulation*> benchmarks;
     public:
         Simulator(ModelLoader*);
         ~Simulator();

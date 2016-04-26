@@ -22,8 +22,12 @@ void Simulator::model_benchmarks()
     int cnt = 0;
     for (auto it = model->factors.begin(); it != model->factors.cend(); it++)
     {
-        Stock* s = new Stock(*it, model->factor_files.at(cnt++));
-        benchmarks.push_back(s);
+        Stock s = Stock(*it, model->factor_files.at(cnt++));
+        double mean = s.ts->compute_mean();
+        double stddev = s.ts->compute_stddev(1);
+        double sprice = s.ts->values.back();
+        GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, 0.05);
+        benchmarks.push_back(gbms);
     }
 }
 
@@ -31,4 +35,5 @@ void Simulator::model_benchmarks()
 void Simulator::simulate_benchmarks()
 {
     // simulate over each of the benchmark vector elements
+
 }

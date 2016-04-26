@@ -10,11 +10,11 @@
 
 class Stock
 {
-    std::string ticker;
-    TimeSeries* ts;
+    std::string ticker; 
     bool load_data(std::string);
 
     public:
+        TimeSeries* ts;
         Stock(std::string, std::string);
         ~Stock();
 

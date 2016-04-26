@@ -11,10 +11,10 @@
 
 class TimeSeries
 {
-    std::vector<double> values;
     double mean;
     double std_dev;
     public:
+        std::vector<double> values;
         TimeSeries();
         TimeSeries(std::vector<double> vals);
         ~TimeSeries();
