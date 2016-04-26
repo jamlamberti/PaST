@@ -110,11 +110,11 @@ def model_stock(ticker, start_date, end_date):
 
     with open('models/test_model.mod', 'w') as f_handle:
         f_handle.write('stocks = ["%s"];\n' % ticker)
-        f_handle.write('stockfiles = ["model/%s_data.dat"];\n' % ticker)
+        f_handle.write('stockfiles = ["models/%s_data.dat"];\n' % ticker)
         f_handle.write('factors = ["%s"];\n' %
                        '", "'.join(sorted(benchmarks.keys())))
         f_handle.write('factorfiles = ["%s"];\n' % '", "'.join(
-            [os.path.join('model', '%s.dat' % x) for x in sorted(benchmarks.keys())]))
+            [os.path.join('models', '%s.dat' % x) for x in sorted(benchmarks.keys())]))
         f_handle.write('%s = [%s, %0.6f]' %
                        (ticker, ", ".join(map(lambda x: '%0.6f' % x, coef)), intercept))
 
