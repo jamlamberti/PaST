@@ -118,6 +118,13 @@ def model_stock(ticker, start_date, end_date):
         f_handle.write('%s = [%s, %0.6f]' %
                        (ticker, ", ".join(map(lambda x: '%0.6f' % x, coef)), intercept))
 
+    with open(os.path.join('models', '%s_data.dat'%ticker), 'w') as f_handle:
+        f_handle.write(' '.join(map(lambda x: '%0.5f'%x, data)))
+
+    for benchmark in benchmarks:
+        with open(os.path.join('models', '%s.dat'%benchmark), 'w') as f_handle:
+            f_handle.write(' '.join(map(lambda x: '%0.5f'%x, [benchmarks[benchmark][di] for di in dates])))
+
 
 if __name__ == '__main__':
     model_stock('WMT', '2014-03-01', '2016-03-01')
