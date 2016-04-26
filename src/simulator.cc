@@ -34,6 +34,7 @@ void Simulator::model_benchmarks()
 
 void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
+    double* final_prices = new double[num_traces];
     cilk_for(unsigned int iter = 0; iter < num_traces; iter++)
     {
         // simulate over each of the benchmark vector elements
@@ -46,12 +47,21 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
         int cnt = 0;
         for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
         {
-            std::vector<double> benchmark = (*it)->simulate_trace(0, num_steps);
+            std::vector<double> benchmark = (*it)->simulate_trace(iter, num_steps);
             for (unsigned int i = 0; i < num_steps; i++)
             {
                 prices[i] += model->factor_models[0][cnt]*benchmark[i];
             }
             cnt++;
         }
+        final_prices[iter] = prices.back();
     }
+    std::vector<double> vec(final_prices, final_prices+num_traces);
+    delete(final_prices);
+    TimeSeries ts(vec);
+    std::cout << ts.compute_mean() << " " << ts.compute_stddev() << " ";
+    
+    // Compute 5% VaR
+    RiskMeasures rm(ts);
+    std::cout << rm.value_at_risk(95, 10000) << std::endl;
 }

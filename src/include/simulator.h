@@ -9,6 +9,7 @@
 #include "model_loader.h"
 #include "stock.h"
 #include "gbm_simulation.h"
+#include "risk_measures.h"
 
 class Simulator
 {
