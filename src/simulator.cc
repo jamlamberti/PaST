@@ -32,28 +32,26 @@ void Simulator::model_benchmarks()
 }
 
 
-void Simulator::simulate_benchmarks()
+void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
-    // simulate over each of the benchmark vector elements
-    std::vector<double> prices;
-    for (int i = 0; i < 365; i++)
+    cilk_for(unsigned int iter = 0; iter < num_traces; iter++)
     {
-        prices.emplace_back(model->factor_models[0].back());
-    }
-
-    int cnt = 0;
-    for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
-    {
-        std::vector<double> benchmark = (*it)->simulate_trace(0, 365);
-        for (int i = 0; i < 365; i++)
+        // simulate over each of the benchmark vector elements
+        std::vector<double> prices;
+        for (unsigned int i = 0; i < num_steps; i++)
         {
-            prices[i] += model->factor_models[0][cnt]*benchmark[i];
+            prices.emplace_back(model->factor_models[0].back());
         }
-        cnt++;
+
+        int cnt = 0;
+        for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
+        {
+            std::vector<double> benchmark = (*it)->simulate_trace(0, num_steps);
+            for (unsigned int i = 0; i < num_steps; i++)
+            {
+                prices[i] += model->factor_models[0][cnt]*benchmark[i];
+            }
+            cnt++;
+        }
     }
-    for (auto it = prices.begin(); it != prices.cend(); it++)
-    {
-        std::cout << *it << " ";
-    }
-    std::cout << std::endl;
 }
