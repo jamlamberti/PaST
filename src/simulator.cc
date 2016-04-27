@@ -14,7 +14,6 @@ Simulator::~Simulator()
     }
 }
 
-
 void Simulator::model_benchmarks()
 {
     benchmarks.clear();
@@ -30,7 +29,6 @@ void Simulator::model_benchmarks()
         benchmarks.push_back(gbms);
     }
 }
-
 
 void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
@@ -59,9 +57,6 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
     std::vector<double> vec(final_prices, final_prices+num_traces);
     delete(final_prices);
     TimeSeries ts(vec);
-    std::cout << ts.compute_mean() << " " << ts.compute_stddev() << " ";
-    
-    // Compute 5% VaR
     RiskMeasures rm(ts);
-    std::cout << rm.value_at_risk(95, 10000) << std::endl;
+    std::cout << ts.compute_mean() << " " << ts.compute_stddev() << " " << rm.value_at_risk(95, 10000) << " " << rm.value_at_risk(99, 10000) << std::endl;
 }
