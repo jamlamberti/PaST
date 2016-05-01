@@ -97,7 +97,9 @@ def model_stock(ticker, start_date, end_date):
     for root, _, files in os.walk(os.path.abspath('data')):
         for data_file in files:
             try:
-                benchmarks[os.path.splitext(os.path.basename(data_file))[0]] = wrap_benchmark(
+                benchmark_file = os.path.splitext(
+                    os.path.basename(data_file))[0]
+                benchmarks[benchmark_file] = wrap_benchmark(
                     os.path.join(root, data_file),
                     dates)
             except Exception, e:
@@ -105,25 +107,36 @@ def model_stock(ticker, start_date, end_date):
                 print data_file
     coef, intercept = run_regression(data, benchmarks, dates)
     # print coef, intercept
-    print '%s = [%s, %0.6f]' % (ticker, ", ".join(map(lambda x: '%0.6f' % x, coef)), intercept)
+    print '%s = [%s, %0.6f]' % (
+        ticker,
+        ", ".join(map(lambda x: '%0.6f' % x, coef)),
+        intercept)
     # Export the model
 
     with open('models/test_model.mod', 'w') as f_handle:
         f_handle.write('stocks = ["%s"];\n' % ticker)
         f_handle.write('stockfiles = ["models/%s_data.dat"];\n' % ticker)
+        f_handle.write('allocations = [10.4];\n')
         f_handle.write('factors = ["%s"];\n' %
                        '", "'.join(sorted(benchmarks.keys())))
         f_handle.write('factorfiles = ["%s"];\n' % '", "'.join(
-            [os.path.join('models', '%s.dat' % x) for x in sorted(benchmarks.keys())]))
-        f_handle.write('%s = [%s, %0.6f]' %
-                       (ticker, ", ".join(map(lambda x: '%0.6f' % x, coef)), intercept))
+            [os.path.join('models', '%s.dat' % x)
+                for x in sorted(benchmarks.keys())]))
+        f_handle.write('%s = [%s, %0.6f];' % (
+            ticker,
+            ", ".join(map(lambda x: '%0.6f' % x, coef)),
+            intercept))
 
-    with open(os.path.join('models', '%s_data.dat'%ticker), 'w') as f_handle:
-        f_handle.write(' '.join(map(lambda x: '%0.5f'%x, data)))
+    with open(os.path.join('models', '%s_data.dat' % ticker), 'w') as f_handle:
+        f_handle.write(' '.join(map(lambda x: '%0.5f' % x, data)))
 
     for benchmark in benchmarks:
-        with open(os.path.join('models', '%s.dat'%benchmark), 'w') as f_handle:
-            f_handle.write(' '.join(map(lambda x: '%0.5f'%x, [benchmarks[benchmark][di] for di in dates])))
+        with open(os.path.join(
+                'models',
+                '%s.dat' % benchmark), 'w') as f_handle:
+            f_handle.write(' '.join(map(
+                lambda x: '%0.5f' % x,
+                [benchmarks[benchmark][di] for di in dates])))
 
 
 if __name__ == '__main__':
