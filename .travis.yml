@@ -8,7 +8,7 @@ before_install:
     - ./install_gtest.sh
     - ./install_libconfig.sh
     - gem install coveralls-lcov
-    - pip install -r requirements.txt
+    - sudo pip install -r requirements.txt
 
 script:
     - python model_gen/regression_analysis.py
