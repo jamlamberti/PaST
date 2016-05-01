@@ -85,7 +85,7 @@ bool ModelLoader::load_model(std::string model_file)
         std::cerr << "Factor Models must be defined for each stock in the model" << std::endl;
         return false;
     }
-
+    
     try
     {
         const libconfig::Setting &stock_fi = root["stockfiles"];
@@ -102,6 +102,26 @@ bool ModelLoader::load_model(std::string model_file)
     } catch (const libconfig::SettingNotFoundException &nfex)
     {
         std::cerr << "Stockfiles must be defined in the model" << std::endl;
+        return false;
+    }
+
+    try
+    {
+
+        const libconfig::Setting &stock_al = root["allocations"];
+        if (stock_al.getLength() != num_stocks)
+        {
+            std::cerr << "Allocations must have the same size as stocks" << std::endl;
+            return false;
+        }
+
+        for (int i = 0; i < num_stocks; i++)
+        {
+            stock_allocations.emplace_back((double)stock_al[i]);
+        }
+    } catch (const libconfig::SettingNotFoundException &nfex)
+    {
+        std::cerr << "Stock Allocations must be defined in the model" << std::endl;
         return false;
     }
 
