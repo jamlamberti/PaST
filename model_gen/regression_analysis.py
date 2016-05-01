@@ -1,14 +1,14 @@
 import os
 import csv
 import datetime
-from collections import defaultdict
+# from collections import defaultdict
 
 import numpy as np
 
-import scipy.stats
-import scipy.linalg
+# import scipy.stats
+# import scipy.linalg
 from sklearn import linear_model
-from sklearn.feature_selection import chi2
+# from sklearn.feature_selection import chi2
 import yahoo_finance
 
 

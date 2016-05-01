@@ -8,8 +8,13 @@ before_install:
     - ./install_gtest.sh
     - ./install_libconfig.sh
     - gem install coveralls-lcov
+    - pip install -r requirements.txt
 
 script:
+    - python model_gen/regression_analysis.py
+    - make
+    - bin/main models/test_model.mod
+    - make clean
     - make TESTING=1
     - bin/main
 
