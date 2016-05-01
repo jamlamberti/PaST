@@ -8,7 +8,8 @@ before_install:
     - ./install_gtest.sh
     - ./install_libconfig.sh
     - gem install coveralls-lcov
-    - sudo pip install -r requirements.txt
+    - sudo apt-get install python-sklearn python-numpy
+    - sudo pip install yahoo_finance
 
 script:
     - python model_gen/regression_analysis.py
