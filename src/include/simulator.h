@@ -15,6 +15,7 @@ class Simulator
 {
     ModelLoader* model;
     std::vector<GBMSimulation*> benchmarks;
+    double port_worth;
     public:
         Simulator(ModelLoader*);
         ~Simulator();

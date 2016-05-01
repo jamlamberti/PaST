@@ -19,14 +19,25 @@ void Simulator::model_benchmarks()
     benchmarks.clear();
     // push onto benchmarks vector
     int cnt = 0;
+    port_worth = 0.0;
+    for (auto it = model->stocks.begin(); it != model->stocks.cend(); it++)
+    {
+        Stock s = Stock(*it, model->stock_files.at(cnt));
+        port_worth += model->stock_allocations.at(cnt)*s.ts->values.at(0);
+        cnt++;
+    }
+
+    cnt = 0;
+
     for (auto it = model->factors.begin(); it != model->factors.cend(); it++)
     {
-        Stock s = Stock(*it, model->factor_files.at(cnt++));
+        Stock s = Stock(*it, model->factor_files.at(cnt));
         double mean = s.ts->compute_mean();
         double stddev = s.ts->compute_stddev(1);
         double sprice = s.ts->values.back();
         GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, 0.05);
         benchmarks.push_back(gbms);
+        cnt++;
     }
 }
 
@@ -67,7 +78,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
         for (unsigned int i = 0; i < prices.size(); i++)
         {
             // Should use values from file
-            final_price += (1.0/prices.size()) * prices[i].back();
+            final_price += model->stock_allocations[i] * prices[i].back();
         }
         final_prices[iter] = final_price;
     }
@@ -75,5 +86,5 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
     delete(final_prices);
     TimeSeries ts(vec);
     RiskMeasures rm(ts);
-    std::cout << ts.compute_mean() << " " << ts.compute_stddev() << " " << rm.value_at_risk(95, 10000) << " " << rm.value_at_risk(99, 10000) << std::endl;
+    std::cout << ts.compute_mean() << " " << ts.compute_stddev() << " " << rm.value_at_risk(95, port_worth) << " " << rm.value_at_risk(99, port_worth) << std::endl;
 }
