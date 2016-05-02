@@ -7,10 +7,12 @@ ifneq "$(shell which g++-5)" ""
 	CXX = g++-5
 endif
 
-CXXFLAGS = -std=c++11 -O1 -fcilkplus -I googletest/googletest/include  -I src/include --coverage -Wall -Werror
+CXXFLAGS = -std=c++11 -fcilkplus -I googletest/googletest/include  -I src/include --coverage -Wall -Werror
 LDFLAGS = googletest/googlemock/gtest/libgtest.a googletest/googlemock/gtest/libgtest_main.a -lm -lconfig++
 ifeq ($(TESTING), 1)
-	CXXFLAGS += -DTESTING --coverage
+	CXXFLAGS += -DTESTING --coverage -O1
+else
+	CXXFLAGS += -O3
 endif
 
 TARGET = $(ODIR)/main
