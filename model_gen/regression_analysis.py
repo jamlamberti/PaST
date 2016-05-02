@@ -145,5 +145,84 @@ def model_stock(
                 [benchmarks[benchmark][di] for di in dates])))
 
 
+def model_stocks(
+        tickers,
+        allocations,
+        start_date,
+        end_date,
+        num_traces=1000,
+        num_steps=100):
+    """Model a stock"""
+    data = []
+    stock_prices = {}
+    for ticker in tickers:
+        raw_data = download_data(ticker, start_date, end_date)
+        stock_prices[ticker] = {}
+        for row in sorted(
+                raw_data,
+                key=lambda x: datetime.datetime.strptime(x['Date'], '%Y-%m-%d')):
+            stock_prices[ticker][datetime.datetime.strptime(row['Date'], '%Y-%m-%d').date()] = float(row['Adj_Close'])
+    dates = set(stock_prices[tickers[0]].keys())
+    for ticker in tickers:
+        dates = dates & set(stock_prices[tickers[0]].keys())
+    stocks_final = {}
+    dates = sorted(list(dates))
+    for ticker in tickers:
+        stocks_final[ticker] = [stock_prices[ticker][dtime] for dtime in dates]
+
+    benchmarks = {}
+    for root, _, files in os.walk(os.path.abspath('data')):
+        for data_file in files:
+            try:
+                benchmark_file = os.path.splitext(
+                    os.path.basename(data_file))[0]
+                benchmarks[benchmark_file] = wrap_benchmark(
+                    os.path.join(root, data_file),
+                    dates)
+            except Exception, e:
+                print e
+                print data_file
+    #coef, intercept = run_regression(data, benchmarks, dates)
+    # print coef, intercept
+    #print '%s = [%s, %0.6f]' % (
+    #    ticker,
+    #    ", ".join(map(lambda x: '%0.6f' % x, coef)),
+    #    intercept)
+
+    # Export the model
+
+    with open('models/test_model.mod', 'w') as f_handle:
+        f_handle.write('stocks = ["%s"];\n' % '", "'.join(tickers))
+        #f_handle.write('stockfiles = ["models/%s_data.dat"];\n' % ticker)
+        f_handle.write('stockfiles = ["%s"];\n' %
+                        '", "'.join([os.path.join('models', '%s_data.dat'%ticker.lower()) for ticker in tickers]))
+
+        f_handle.write('allocations = [%s];\n' % (", ".join(map(str, allocations))))
+        f_handle.write('factors = ["%s"];\n' %
+                       '", "'.join(sorted(benchmarks.keys())))
+        f_handle.write('factorfiles = ["%s"];\n' % '", "'.join(
+            [os.path.join('models', '%s.dat' % x)
+                for x in sorted(benchmarks.keys())]))
+        for ticker in tickers:
+            coef, intercept = run_regression(stocks_final[ticker], benchmarks, dates)
+            f_handle.write('%s = [%s, %0.6f];\n' % (
+                ticker,
+                ", ".join(map(lambda x: '%0.6f' % x, coef)),
+                intercept))
+
+        f_handle.write('numtraces = %d;\nnumsteps = %d;'%(num_traces, num_steps))
+    for ticker in tickers:
+        with open(os.path.join('models', '%s_data.dat' % ticker.lower()), 'w') as f_handle:
+            f_handle.write(' '.join(map(lambda x: '%0.5f' % x, stocks_final[ticker])))
+
+    for benchmark in benchmarks:
+        with open(os.path.join(
+                'models',
+                '%s.dat' % benchmark), 'w') as f_handle:
+            f_handle.write(' '.join(map(
+                lambda x: '%0.5f' % x,
+                [benchmarks[benchmark][di] for di in dates])))
+
+
 if __name__ == '__main__':
-    model_stock('WMT', '2014-03-01', '2016-03-01')
+    model_stocks(['WMT', 'XOM'], [100.25, 20.75], '2014-03-01', '2016-03-01')
