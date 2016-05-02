@@ -3,12 +3,16 @@
 void run_model(char* model_file)
 {
     ModelLoader ml;
-    ml.load_model(model_file);
+    if (!ml.load_model(model_file))
+    {
+        std::cerr << "Error loading model..." << std::endl;
+        return;
+    }
     
     // Simulate the bechmarks
     Simulator sim(&ml);
     sim.model_benchmarks();
-    sim.simulate_benchmarks(100000, 500);
+    sim.simulate_benchmarks();
 }
 
 int main(int argc, char** argv)

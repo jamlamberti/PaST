@@ -2,6 +2,8 @@
 
 ModelLoader::ModelLoader()
 {
+    num_traces = 0;
+    num_steps = 0;
 }
 
 ModelLoader::~ModelLoader()
@@ -141,6 +143,16 @@ bool ModelLoader::load_model(std::string model_file)
     } catch (const libconfig::SettingNotFoundException &nfex)
     {
         std::cerr << "Factorfiles must be defined in the model" << std::endl;
+        return false;
+    }
+
+    try
+    {
+        num_traces = cfg.lookup("numtraces");
+        num_steps = cfg.lookup("numsteps");
+    } catch (const libconfig::SettingNotFoundException &nfex)
+    {
+        std::cerr << "num_traces and num_steps must be defined in the model" << std::endl;
         return false;
     }
 

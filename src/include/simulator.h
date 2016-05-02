@@ -20,6 +20,7 @@ class Simulator
         Simulator(ModelLoader*);
         ~Simulator();
         void model_benchmarks();
+        void simulate_benchmarks();
         void simulate_benchmarks(unsigned int, unsigned int);
 };
 

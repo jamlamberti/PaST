@@ -41,6 +41,11 @@ void Simulator::model_benchmarks()
     }
 }
 
+void Simulator::simulate_benchmarks()
+{
+    return Simulator::simulate_benchmarks(model->num_traces, model->num_steps);
+}
+
 void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
     double* final_prices = new double[num_traces];
