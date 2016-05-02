@@ -80,7 +80,12 @@ def run_regression(ticker_pricing, benchmarks, dates):
     return clr.coef_, clr.intercept_
 
 
-def model_stock(ticker, start_date, end_date):
+def model_stock(
+        ticker,
+        start_date,
+        end_date,
+        num_traces=1000,
+        num_steps=100):
     """Model a stock"""
     dates = []
     data = []
@@ -122,10 +127,11 @@ def model_stock(ticker, start_date, end_date):
         f_handle.write('factorfiles = ["%s"];\n' % '", "'.join(
             [os.path.join('models', '%s.dat' % x)
                 for x in sorted(benchmarks.keys())]))
-        f_handle.write('%s = [%s, %0.6f];' % (
+        f_handle.write('%s = [%s, %0.6f];\n' % (
             ticker,
             ", ".join(map(lambda x: '%0.6f' % x, coef)),
             intercept))
+        f_handle.write('numtraces = %d;\nnumsteps = %d;'%(num_traces, num_steps))
 
     with open(os.path.join('models', '%s_data.dat' % ticker), 'w') as f_handle:
         f_handle.write(' '.join(map(lambda x: '%0.5f' % x, data)))
