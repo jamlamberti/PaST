@@ -88,7 +88,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
         final_prices[iter] = final_price;
     }
     std::vector<double> vec(final_prices, final_prices+num_traces);
-    delete(final_prices);
+    delete[] final_prices;
     TimeSeries ts(vec);
     RiskMeasures rm(ts);
     std::cout << ts.compute_mean() << " " << ts.compute_stddev() << " " << rm.value_at_risk(95, port_worth) << " " << rm.value_at_risk(99, port_worth) << std::endl;
