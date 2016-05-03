@@ -1,9 +1,9 @@
 stocks = ["WMT", "XOM"];
 stockfiles = ["models/wmt_data.dat", "models/xom_data.dat"];
 allocations = [100.25, 20.75];
-factors = ["10_year_treasury_maturity", "Real_Median_Household_Income", "Smoothed_US_Recession_Probabilities", "adjusted_unemployment_rate", "wti_spot_prices"];
-factorfiles = ["models/10_year_treasury_maturity.dat", "models/Real_Median_Household_Income.dat", "models/Smoothed_US_Recession_Probabilities.dat", "models/adjusted_unemployment_rate.dat", "models/wti_spot_prices.dat"];
-WMT = [-15.438835, 0.000000, -2.658913, 15.343503, -0.150512, 33.185866];
-XOM = [-11.866927, 0.000000, 0.816032, 4.227881, 0.299527, 68.471576];
+factors = ["10_year_treasury_maturity", "Real_Median_Household_Income", "Smoothed_US_Recession_Probabilities", "adjusted_unemployment_rate", "sp_500", "wti_spot_prices"];
+factorfiles = ["models/10_year_treasury_maturity.dat", "models/Real_Median_Household_Income.dat", "models/Smoothed_US_Recession_Probabilities.dat", "models/adjusted_unemployment_rate.dat", "models/sp_500.dat", "models/wti_spot_prices.dat"];
+WMT = [-16.934078, 0.000000, -1.786552, 16.496076, 0.025358, -0.091094, -25.248323];
+XOM = [-13.669654, 0.000000, 1.867786, 5.617470, 0.030573, 0.371164, -1.979085];
 numtraces = 1000;
 numsteps = 100;

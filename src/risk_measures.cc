@@ -48,6 +48,11 @@ double RiskMeasures::max_drawdown()
         if (drawdown > mdd)
         {
             mdd = drawdown;
+            /*
+            if (drawdown > 100.0)
+            {
+                std::cout << peak << " " << *it << " -> " << mdd << std::endl;
+            }*/
         }
     }
     return mdd;

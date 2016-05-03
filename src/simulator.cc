@@ -75,7 +75,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             {
                 for (unsigned int i = 0; i < num_steps; i++)
                 {
-                    prices[j][i] += std::max(model->factor_models[j][cnt]*benchmark[i], 0.0);
+                    prices[j][i] += model->factor_models[j][cnt]*benchmark[i];
                 }
             }
             cnt++;
@@ -87,7 +87,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             for (unsigned int i = 0; i < prices.size(); i++)
             {
                 // Should use values from file
-                curr_price += model->stock_allocations[i] * prices[i][j];
+                curr_price += std::max(0.0, model->stock_allocations[i] * prices[i][j]);
             }
             portfolio_prices.emplace_back(curr_price);
         }
