@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <vector>
+#include <algorithm>
 #include <cmath>
 #include <cassert>
 #include <cilk/cilk.h>

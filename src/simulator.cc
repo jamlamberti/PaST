@@ -75,7 +75,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             {
                 for (unsigned int i = 0; i < num_steps; i++)
                 {
-                    prices[j][i] += model->factor_models[j][cnt]*benchmark[i];
+                    prices[j][i] += std::max(model->factor_models[j][cnt]*benchmark[i], 0.0);
                 }
             }
             cnt++;
