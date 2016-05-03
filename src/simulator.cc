@@ -49,7 +49,8 @@ void Simulator::simulate_benchmarks()
 void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
     double* final_prices = new double[num_traces];
-    //double* drawdowns = new double[num_traces];
+    double* drawdowns = new double[num_traces];
+    
     cilk_for(unsigned int iter = 0; iter < num_traces; iter++)
     {
         std::vector<double>portfolio_prices;
@@ -91,10 +92,29 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             portfolio_prices.emplace_back(curr_price);
         }
         final_prices[iter] = portfolio_prices.back();
+        TimeSeries ts(portfolio_prices);
+        RiskMeasures rm(ts);
+        drawdowns[iter] = rm.max_drawdown();
     }
     std::vector<double> vec(final_prices, final_prices+num_traces);
     delete[] final_prices;
+    // Find the max drawdown
+
+    cilk::reducer< cilk::op_max<double> > max_drawdown;
+    cilk::reducer< cilk::op_add<double> > drawdown_sum(0);
+    cilk_for(unsigned int iter = 0; iter < num_traces; iter++)
+    {
+        max_drawdown->calc_max(drawdowns[iter]);
+        *drawdown_sum += drawdowns[iter];
+    }
+
+    delete[] drawdowns;
     TimeSeries ts(vec);
     RiskMeasures rm(ts);
-    std::cout << ts.compute_mean() << " " << ts.compute_stddev() << " " << rm.value_at_risk(95, port_worth) << " " << rm.value_at_risk(99, port_worth) << std::endl;
+    std::cout << "Mean:    " << ts.compute_mean() << std::endl;
+    std::cout << "Stddev:  " << ts.compute_stddev() << std::endl;
+    std::cout << "95% VaR: " << rm.value_at_risk(95, port_worth) << std::endl;
+    std::cout << "99% VaR: " << rm.value_at_risk(99, port_worth) << std::endl;
+    std::cout << "Max DD:  " << max_drawdown.get_value() << "%" << std::endl;
+    std::cout << "Avg MDD: " << drawdown_sum.get_value()/num_traces << "%" << std::endl;
 }

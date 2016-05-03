@@ -32,6 +32,7 @@ double RiskMeasures::value_at_risk(int confidence, double worth)
 
 double RiskMeasures::max_drawdown()
 {
+    // Typically measured as a percentage
     double mdd = 0.0;
     double drawdown = 0.0;
     double peak = ts.values.at(0);
@@ -42,7 +43,7 @@ double RiskMeasures::max_drawdown()
         {
             peak = *it;
         }
-        drawdown = 100.0*(peak-*it)/peak;
+        drawdown = 100*(peak-*it)/peak;
 
         if (drawdown > mdd)
         {

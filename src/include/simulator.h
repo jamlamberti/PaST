@@ -5,6 +5,8 @@
 #include <vector>
 #include <cmath>
 #include <cassert>
+#include <cilk/cilk.h>
+#include <cilk/reducer_max.h>
 #include <gtest/gtest.h>
 #include "model_loader.h"
 #include "stock.h"
