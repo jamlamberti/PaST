@@ -88,7 +88,8 @@ def model_stocks(
         start_date,
         end_date,
         num_traces=1000,
-        num_steps=100):
+        num_steps=100,
+        num_threads=None):
     """Model a stock"""
     data = []
     stock_prices = {}
@@ -152,8 +153,11 @@ def model_stocks(
                 ", ".join(map(lambda x: '%0.6f' % x, coef)),
                 intercept))
 
-        f_handle.write('numtraces = %d;\nnumsteps = %d;' %
+        f_handle.write('numtraces = %d;\nnumsteps = %d;\n' %
                        (num_traces, num_steps))
+        if num_threads is not None:
+            f_handle.write('numthreads = "%d";\n' % num_threads)
+
     for ticker in tickers:
         with open(os.path.join(
                 'models',
@@ -171,4 +175,4 @@ def model_stocks(
 
 
 if __name__ == '__main__':
-    model_stocks(['WMT', 'XOM'], [100.25, 20.75], '2014-03-01', '2016-03-01')
+    model_stocks(['WMT', 'XOM'], [100.25, 20.75], '2015-03-01', '2016-03-01')

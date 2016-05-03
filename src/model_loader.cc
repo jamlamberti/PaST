@@ -156,6 +156,17 @@ bool ModelLoader::load_model(std::string model_file)
         return false;
     }
 
+    try
+    {
+        const char* num_threads = cfg.lookup("numthreads");
+        __cilkrts_end_cilk();
+        __cilkrts_set_param("nworkers", num_threads);
+        //std::cout << " [+] Switching to " << num_threads << " threads" << std::endl;
+    } catch (const libconfig::SettingNotFoundException &nfex)
+    {
+        // Just keep using cilk defaults!
+    }
+
     std::cout << " [+] Successfully loaded " << num_stocks << " stocks and " << num_factors << " factors" << std::endl;
 
     return true;

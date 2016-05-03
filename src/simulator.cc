@@ -26,6 +26,7 @@ void Simulator::model_benchmarks()
         port_worth += model->stock_allocations.at(cnt)*s.ts->values.at(0);
         cnt++;
     }
+    std::cout << "Current Worth: " << port_worth << std::endl;
 
     cnt = 0;
 
@@ -48,6 +49,7 @@ void Simulator::simulate_benchmarks()
 
 void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
+    std::cout << " [+] Running with " << __cilkrts_get_nworkers() << " threads" << std::endl;
     double* final_prices = new double[num_traces];
     double* drawdowns = new double[num_traces];
     

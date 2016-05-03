@@ -5,6 +5,8 @@
 #include <vector>
 #include <string>
 #include <cassert>
+#include <cilk/cilk.h>
+#include <cilk/cilk_api.h>
 #include <gtest/gtest.h>
 #include <libconfig.h++>
 
