@@ -13,6 +13,7 @@ class RiskMeasures
         RiskMeasures(TimeSeries);
         ~RiskMeasures();
         double value_at_risk(int, double);
+        double max_drawdown();
 
 };
 

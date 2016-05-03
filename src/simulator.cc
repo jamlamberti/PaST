@@ -49,9 +49,10 @@ void Simulator::simulate_benchmarks()
 void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
     double* final_prices = new double[num_traces];
+    //double* drawdowns = new double[num_traces];
     cilk_for(unsigned int iter = 0; iter < num_traces; iter++)
     {
-        //std::vector<double>portfolio_prices;
+        std::vector<double>portfolio_prices;
         // simulate over each of the benchmark vector elements
         std::vector<std::vector<double>> prices;
         for (unsigned int j = 0; j < model->stocks.size(); j++)
@@ -78,14 +79,18 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             }
             cnt++;
         }
-        double final_price = 0.0;
         cnt = 0;
-        for (unsigned int i = 0; i < prices.size(); i++)
+        for (unsigned int j = 0; j < num_steps; j++)
         {
-            // Should use values from file
-            final_price += model->stock_allocations[i] * prices[i].back();
+            double curr_price = 0.0;
+            for (unsigned int i = 0; i < prices.size(); i++)
+            {
+                // Should use values from file
+                curr_price += model->stock_allocations[i] * prices[i][j];
+            }
+            portfolio_prices.emplace_back(curr_price);
         }
-        final_prices[iter] = final_price;
+        final_prices[iter] = portfolio_prices.back();
     }
     std::vector<double> vec(final_prices, final_prices+num_traces);
     delete[] final_prices;
