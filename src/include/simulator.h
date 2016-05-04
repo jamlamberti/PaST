@@ -7,6 +7,7 @@
 #include <cmath>
 #include <cassert>
 #include <cilk/cilk.h>
+#include <cilk/cilk_api.h>
 #include <cilk/reducer_max.h>
 #include <gtest/gtest.h>
 #include "model_loader.h"
