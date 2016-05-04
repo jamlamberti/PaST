@@ -12,7 +12,10 @@ void run_model(char* model_file)
     // Simulate the bechmarks
     Simulator sim(&ml);
     sim.model_benchmarks();
+    auto start = std::chrono::steady_clock::now();
     sim.simulate_benchmarks();
+    auto duration = std::chrono::duration_cast< timing >(std::chrono::steady_clock::now()-start);
+    std::cout << duration.count() << std::endl;
 }
 
 int main(int argc, char** argv)
