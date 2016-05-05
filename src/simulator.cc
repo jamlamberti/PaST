@@ -52,67 +52,73 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
     std::cout << " [+] Running with " << __cilkrts_get_nworkers() << " threads" << std::endl;
     double* final_prices = new double[num_traces];
     double* drawdowns = new double[num_traces];
-    
-    cilk_for(unsigned int iter = 0; iter < num_traces; iter++)
+    unsigned int chunk_size = 4;
+    cilk_for(unsigned int chunk_iters = 0; chunk_iters < num_traces; chunk_iters+=chunk_size)
     {
-        // std::vector<double>portfolio_prices;
-        // simulate over each of the benchmark vector elements
-        std::vector<std::vector<double>> prices;
-        for (unsigned int j = 0; j < model->stocks.size(); j++)
+        for (unsigned int iter_cnt = 0; iter_cnt < chunk_size; iter_cnt++)
         {
-            std::vector<double> curr;
-            for (unsigned int i = 0; i < num_steps; i++)
-            {
-                curr.emplace_back(model->factor_models[j].back());
-            }
-            prices.push_back(curr);
-        }
+            unsigned int iter = iter_cnt + chunk_iters;
+            if (iter >= num_traces) break;
 
-        int cnt = 0;
-
-        for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
-        {
-            std::vector<double> benchmark = (*it)->simulate_trace(iter, num_steps);
-            for (unsigned int j = 0; j < prices.size(); j++)
+            // std::vector<double>portfolio_prices;
+            // simulate over each of the benchmark vector elements
+            std::vector<std::vector<double>> prices;
+            for (unsigned int j = 0; j < model->stocks.size(); j++)
             {
+                std::vector<double> curr;
                 for (unsigned int i = 0; i < num_steps; i++)
                 {
-                    prices[j][i] += model->factor_models[j][cnt]*benchmark[i];
+                    curr.emplace_back(model->factor_models[j].back());
                 }
+                prices.push_back(curr);
             }
-            cnt++;
+
+            int cnt = 0;
+
+            for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
+            {
+                std::vector<double> benchmark = (*it)->simulate_trace(iter, num_steps);
+                for (unsigned int j = 0; j < prices.size(); j++)
+                {
+                    for (unsigned int i = 0; i < num_steps; i++)
+                    {
+                        prices[j][i] += model->factor_models[j][cnt]*benchmark[i];
+                    }
+                }
+                cnt++;
+            }
+            cnt = 0;
+            double mdd = 0.0;
+            double drawdown = 0.0;
+            double peak = 0.0;
+            double curr_price = 0.0;
+            for (unsigned int j = 0; j < num_steps; j++)
+            {
+                curr_price = 0.0;
+
+                for (unsigned int i = 0; i < prices.size(); i++)
+                {
+                    // Should use values from file
+                    curr_price += std::max(0.0, model->stock_allocations[i] * prices[i][j]);
+                }
+                if (curr_price > peak)
+                {
+                    peak = curr_price;
+                }
+
+                drawdown = 100*(peak-curr_price)/peak;
+
+                if (drawdown > mdd)
+                {
+                    mdd = drawdown;
+                }
+                //portfolio_prices.emplace_back(curr_price);
+            }
+            final_prices[iter] = curr_price; // portfolio_prices.back();
+            //TimeSeries ts(portfolio_prices);
+            //RiskMeasures rm(ts);
+            drawdowns[iter] = mdd;
         }
-        cnt = 0;
-        double mdd = 0.0;
-        double drawdown = 0.0;
-        double peak = 0.0;
-        double curr_price = 0.0;
-        for (unsigned int j = 0; j < num_steps; j++)
-        {
-            curr_price = 0.0;
-
-            for (unsigned int i = 0; i < prices.size(); i++)
-            {
-                // Should use values from file
-                curr_price += std::max(0.0, model->stock_allocations[i] * prices[i][j]);
-            }
-            if (curr_price > peak)
-            {
-                peak = curr_price;
-            }
-
-            drawdown = 100*(peak-curr_price)/peak;
-
-            if (drawdown > mdd)
-            {
-                mdd = drawdown;
-            }
-            //portfolio_prices.emplace_back(curr_price);
-        }
-        final_prices[iter] = curr_price; // portfolio_prices.back();
-        //TimeSeries ts(portfolio_prices);
-        //RiskMeasures rm(ts);
-        drawdowns[iter] = mdd;
     }
     std::vector<double> vec(final_prices, final_prices+num_traces);
     delete[] final_prices;
