@@ -49,6 +49,8 @@ void Simulator::simulate_benchmarks()
 
 void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
+    // TODO: instead of relying solely of factor models,
+    // it should be a weighting between the factor model and a GBM sim
     std::cout << " [+] Running with " << __cilkrts_get_nworkers() << " threads" << std::endl;
     double* final_prices = new double[num_traces];
     double* drawdowns = new double[num_traces];
