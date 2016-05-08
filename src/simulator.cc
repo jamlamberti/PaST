@@ -20,12 +20,14 @@ void Simulator::model_benchmarks()
     // push onto benchmarks vector
     int cnt = 0;
     port_worth = 0.0;
+    // starting_prices
     for (auto it = model->stocks.begin(); it != model->stocks.cend(); it++)
     {
         Stock s = Stock(*it, model->stock_files.at(cnt));
-        port_worth += model->stock_allocations.at(cnt)*s.ts->values.at(0);
+        port_worth += model->stock_allocations.at(cnt)*s.ts->values.back();
         cnt++;
     }
+
     std::cout << "Current Worth: " << port_worth << std::endl;
 
     cnt = 0;
@@ -65,6 +67,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             // std::vector<double>portfolio_prices;
             // simulate over each of the benchmark vector elements
             std::vector<std::vector<double>> prices;
+
             for (unsigned int j = 0; j < model->stocks.size(); j++)
             {
                 std::vector<double> curr;
@@ -87,6 +90,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
                         prices[j][i] += model->factor_models[j][cnt]*benchmark[i];
                     }
                 }
+                // Simulate over prices[j]
                 cnt++;
             }
             cnt = 0;
@@ -114,11 +118,8 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
                 {
                     mdd = drawdown;
                 }
-                //portfolio_prices.emplace_back(curr_price);
             }
-            final_prices[iter] = curr_price; // portfolio_prices.back();
-            //TimeSeries ts(portfolio_prices);
-            //RiskMeasures rm(ts);
+            final_prices[iter] = curr_price;
             drawdowns[iter] = mdd;
         }
     }
