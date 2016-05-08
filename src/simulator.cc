@@ -79,7 +79,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
 
             for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
             {
-                std::vector<double> benchmark = (*it)->simulate_trace(iter*cnt + cnt, num_steps);
+                std::vector<double> benchmark = (*it)->simulate_trace(iter*(cnt+1) + cnt, num_steps);
                 for (unsigned int j = 0; j < prices.size(); j++)
                 {
                     for (unsigned int i = 0; i < num_steps; i++)
