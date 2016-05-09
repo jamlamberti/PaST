@@ -23,6 +23,7 @@ class TimeSeries
         double compute_mean();
         double compute_stddev();
         double compute_stddev(int);
+        double compute_volatility();
         std::vector<double> compute_returns();
         std::vector<double> compute_returns(int);
         double compute_skewness(int);

@@ -63,6 +63,23 @@ double TimeSeries::compute_stddev(int ddof)
     return std_dev;
 }
 
+double TimeSeries::compute_volatility()
+{
+    double sum = 0.0;
+    unsigned int end = values.size();
+    for (unsigned int i = 1; i < end; i++)
+    {
+        sum += values[i]/values[i-1];
+    }
+    sum /= (end-1);
+    double square_error = 0.0;
+    for (unsigned int i=1; i < end; i++)
+    {
+        square_error += pow(values[i]/values[i-1]-sum, 2);
+    }
+    return sqrt(square_error/(end-1));
+}
+
 std::vector<double> TimeSeries::compute_returns()
 {
     return TimeSeries::compute_returns(1);

@@ -29,7 +29,7 @@ void Simulator::model_benchmarks()
     {
         Stock s = Stock(*it, model->stock_files.at(cnt));
         port_worth += model->stock_allocations.at(cnt)*s.ts->values.back();
-        GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_stddev(1), s.ts->values.back(), model->short_rate, 1.0);
+        GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->short_rate, 1.0);
         weighted_sims.push_back(gbmw);
         cnt++;
     }
@@ -42,7 +42,7 @@ void Simulator::model_benchmarks()
     {
         Stock s = Stock(*it, model->factor_files.at(cnt));
         double mean = s.ts->compute_mean();
-        double stddev = s.ts->compute_stddev(1);
+        double stddev = s.ts->compute_volatility();
         double sprice = s.ts->values.back();
         GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, model->short_rate);
         benchmarks.push_back(gbms);
