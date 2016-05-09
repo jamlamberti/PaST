@@ -13,6 +13,7 @@
 #include "model_loader.h"
 #include "stock.h"
 #include "gbm_simulation.h"
+#include "gbm_weighted.h"
 #include "risk_measures.h"
 
 class Simulator
@@ -20,6 +21,8 @@ class Simulator
     ModelLoader* model;
     std::vector<GBMSimulation*> benchmarks;
     double port_worth;
+    std::vector<GBMWeighted*> weighted_sims;
+    
     public:
         Simulator(ModelLoader*);
         ~Simulator();

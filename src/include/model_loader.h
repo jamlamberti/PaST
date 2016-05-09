@@ -20,6 +20,10 @@ class ModelLoader
         std::vector<std::string> factors;
         std::vector<std::string> factor_files;
         std::vector< std::vector<double> > factor_models;
+        
+        // Global Params
+        double short_rate;
+        
         unsigned int num_traces;
         unsigned int num_steps;
         ModelLoader();

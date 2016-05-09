@@ -12,6 +12,10 @@ Simulator::~Simulator()
     {
         delete(*it);
     }
+    for (auto it = weighted_sims.begin(); it != weighted_sims.cend(); it++)
+    {
+        delete(*it);
+    }
 }
 
 void Simulator::model_benchmarks()
@@ -25,6 +29,8 @@ void Simulator::model_benchmarks()
     {
         Stock s = Stock(*it, model->stock_files.at(cnt));
         port_worth += model->stock_allocations.at(cnt)*s.ts->values.back();
+        GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_stddev(1), s.ts->values.back(), model->short_rate, 1.0);
+        weighted_sims.push_back(gbmw);
         cnt++;
     }
 
@@ -38,7 +44,7 @@ void Simulator::model_benchmarks()
         double mean = s.ts->compute_mean();
         double stddev = s.ts->compute_stddev(1);
         double sprice = s.ts->values.back();
-        GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, 0.05);
+        GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, model->short_rate);
         benchmarks.push_back(gbms);
         cnt++;
     }
@@ -82,7 +88,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
 
             for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
             {
-                std::vector<double> benchmark = (*it)->simulate_trace(iter*(cnt+1) + cnt, num_steps);
+                std::vector<double> benchmark = (*it)->simulate_trace(iter*(cnt+2) + cnt, num_steps);
                 for (unsigned int j = 0; j < prices.size(); j++)
                 {
                     for (unsigned int i = 0; i < num_steps; i++)
@@ -90,9 +96,14 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
                         prices[j][i] += model->factor_models[j][cnt]*benchmark[i];
                     }
                 }
-                // Simulate over prices[j]
                 cnt++;
             }
+            
+            for (unsigned int j = 0; j < prices.size(); j++)
+            {
+                weighted_sims[j]->simulate_trace(iter*(cnt+1), &(prices[j]));
+            }
+
             cnt = 0;
             double mdd = 0.0;
             double drawdown = 0.0;

@@ -167,6 +167,16 @@ bool ModelLoader::load_model(std::string model_file)
         // Just keep using cilk defaults!
     }
 
+    try
+    {
+        short_rate = cfg.lookup("shortrate");
+
+    } catch (const libconfig::SettingNotFoundException &nfex)
+    {
+        // Use default short rate of 0.05
+        short_rate = 0.05;
+    }
+
     std::cout << " [+] Successfully loaded " << num_stocks << " stocks and " << num_factors << " factors" << std::endl;
 
     return true;

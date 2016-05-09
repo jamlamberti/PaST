@@ -15,7 +15,7 @@ void run_model(char* model_file)
     auto start = std::chrono::steady_clock::now();
     sim.simulate_benchmarks();
     auto duration = std::chrono::duration_cast< timing >(std::chrono::steady_clock::now()-start);
-    std::cout << duration.count() << std::endl;
+    std::cout << duration.count() << " ms" << std::endl;
 }
 
 int main(int argc, char** argv)
