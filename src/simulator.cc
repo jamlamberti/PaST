@@ -29,7 +29,7 @@ void Simulator::model_benchmarks()
     {
         Stock s = Stock(*it, model->stock_files.at(cnt));
         port_worth += model->stock_allocations.at(cnt)*s.ts->values.back();
-        GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->short_rate, 1.0);
+        GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->short_rate, 0.5);
         weighted_sims.push_back(gbmw);
         cnt++;
     }
@@ -101,7 +101,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             
             for (unsigned int j = 0; j < prices.size(); j++)
             {
-                std::vector<double> updated = weighted_sims[j]->simulate_trace(iter*(cnt+1), &(prices[j]));
+                weighted_sims[j]->simulate_trace(iter*(cnt+1), &(prices[j]));
                 // weighted_sims[j] = updated;
             }
 
