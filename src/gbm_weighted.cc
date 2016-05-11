@@ -34,15 +34,11 @@ std::vector<double> GBMWeighted::simulate_trace(unsigned int trace_id, std::vect
     for (unsigned int i = 1; i < num_steps; i++)
     {
         curr = prev*exp((short_rate - 0.5*variance)*dt + std_dev*sqrt(dt)*normal(generator));
-        //curr = std::max(0.0, (gbm_weight*curr + (1-gbm_weight)*model_prices->at(i-1)));
-        //std::cout << curr << std::endl;
+        curr = std::max(0.0, (gbm_weight*curr + (1-gbm_weight)*model_prices->at(i-1)));
         prices.push_back(curr);
         prev = curr;
     }
-    //std::cout << starting_price << " "<< prev << std::endl;
-
-    //std::cout << mean << " " << std_dev << " " << short_rate << " " << prices.back() << std::endl;
-    //std::cout << prices.back() << std::endl;
+    
     return prices;
 }
 

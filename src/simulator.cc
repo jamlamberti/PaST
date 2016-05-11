@@ -101,7 +101,8 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             
             for (unsigned int j = 0; j < prices.size(); j++)
             {
-                weighted_sims[j]->simulate_trace(iter*(cnt+1), &(prices[j]));
+                std::vector<double> updated = weighted_sims[j]->simulate_trace(iter*(cnt+1), &(prices[j]));
+                // weighted_sims[j] = updated;
             }
 
             cnt = 0;
