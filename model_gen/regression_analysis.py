@@ -143,6 +143,7 @@ def model_stocks(
         f_handle.write('factorfiles = ["%s"];\n' % '", "'.join(
             [os.path.join('models', '%s.dat' % x)
                 for x in sorted(benchmarks.keys())]))
+        f_handle.write('factormodels = (%s);\n'%", ".join(['[]' for _ in range(len(benchmarks.keys()))]))
         for ticker in tickers:
             coef, intercept = run_regression(
                 stocks_final[ticker],
