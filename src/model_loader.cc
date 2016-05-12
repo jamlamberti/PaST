@@ -107,6 +107,7 @@ bool ModelLoader::load_model(std::string model_file)
         return false;
     }
 
+
     try
     {
 
@@ -143,6 +144,33 @@ bool ModelLoader::load_model(std::string model_file)
     } catch (const libconfig::SettingNotFoundException &nfex)
     {
         std::cerr << "Factorfiles must be defined in the model" << std::endl;
+        return false;
+    }
+
+    try
+    {
+        const libconfig::Setting &fac_models = root["factormodels"];
+        if (fac_models.getLength() != num_factors)
+        {
+            std::cerr << "factormodels must have the same size as Factor" << std::endl;
+            return false;
+        }
+
+        for (int i = 0; i < num_factors; i++)
+        {
+            // Load in each factor model
+            const libconfig::Setting &model_factor = fac_models[i];
+            std::vector<double> model_params;
+            for (int j = 0; j < model_factor.getLength(); j++)
+            {
+                model_params.emplace_back((double)model_factor[j]);
+            }
+            fmodel_params.emplace_back(model_params);
+        }
+
+    } catch (const libconfig::SettingNotFoundException &nfex)
+    {
+        std::cerr << "FactorModels must be defined in the model" << std::endl;
         return false;
     }
 

@@ -20,7 +20,9 @@ class ModelLoader
         std::vector<std::string> factors;
         std::vector<std::string> factor_files;
         std::vector< std::vector<double> > factor_models;
-        
+        std::vector< std::vector<double> > fmodel_params;
+        std::vector< std::vector<double> > smodel_params;
+
         // Global Params
         double short_rate;
         
