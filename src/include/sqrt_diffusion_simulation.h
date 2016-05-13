@@ -18,7 +18,7 @@ class SqrtDiffusionSimulation : public PriceSimulation
     public:
         SqrtDiffusionSimulation(double mu, double sigma, double starting, double k, double ltm) : PriceSimulation(mu, sigma, starting)
         {
-            kappa = k; // constant short rate
+            kappa = k;
             long_term_mean = ltm;
         }
 
