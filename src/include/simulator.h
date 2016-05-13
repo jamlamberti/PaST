@@ -15,7 +15,7 @@
 #include "gbm_simulation.h"
 #include "gbm_weighted.h"
 #include "sqrt_diffusion_simulation.h"
-// #include "jump_diffusion_simulation.h"
+#include "jump_diffusion_simulation.h"
 #include "risk_measures.h"
 
 class Simulator

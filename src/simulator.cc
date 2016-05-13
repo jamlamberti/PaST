@@ -63,7 +63,14 @@ void Simulator::model_benchmarks()
                 benchmarks.push_back(sqrts);
                 break;
             }
-            
+
+            case 3:
+            {
+                JumpDiffusionSimulation* jmps = new JumpDiffusionSimulation(mean, stddev, sprice, model->fmodel_params[cnt][0], model->fmodel_params[cnt][1], model->fmodel_params[cnt][2]);
+                benchmarks.push_back(jmps);
+                break;
+            }
+
             default:
             {
                 std::cout << " [-] Unknown model parameters, reverting to Geometric Brownian Motion model" << std::endl;
