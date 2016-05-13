@@ -1,6 +1,6 @@
 SDIR = src
 ODIR = bin
-CXXFILES = main time_series linear_regression price_simulation gbm_simulation sqrt_diffusion_simulation model_loader stock risk_measures simulator gbm_weighted
+CXXFILES = main time_series linear_regression price_simulation gbm_simulation sqrt_diffusion_simulation model_loader stock risk_measures simulator gbm_weighted jump_diffusion_simulation
 CXX = g++
 
 ifneq "$(shell which g++-5)" ""

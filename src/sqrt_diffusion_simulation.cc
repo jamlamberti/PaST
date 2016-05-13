@@ -33,6 +33,7 @@ std::vector<double> SqrtDiffusionSimulation::simulate_trace(unsigned int trace_i
         curr = prev + kappa*(long_term_mean - fmax(prev, 0.0))*dt + std_dev * sqrt(dt*fmax(prev, 0.0))*normal(generator);
         // returns.push_back(curr/fmax(prev, 0.0));
         prices.push_back(fmax(curr, 0.0));
+        prev = curr;
     }
 
     return prices;
