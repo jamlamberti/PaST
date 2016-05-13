@@ -12,12 +12,14 @@ class SqrtDiffusionSimulation : public PriceSimulation
 {
     protected:
         double kappa;
+        double long_term_mean;
         //void simulate_trace(unsigned int trace_id, unsigned int num_steps);
 
     public:
-        SqrtDiffusionSimulation(double mu, double sigma, double starting, double k) : PriceSimulation(mu, sigma, starting)
+        SqrtDiffusionSimulation(double mu, double sigma, double starting, double k, double ltm) : PriceSimulation(mu, sigma, starting)
         {
             kappa = k; // constant short rate
+            long_term_mean = ltm;
         }
 
         void run_simulation();

@@ -44,9 +44,36 @@ void Simulator::model_benchmarks()
         double mean = s.ts->compute_mean();
         double stddev = s.ts->compute_volatility();
         double sprice = s.ts->values.back();
-        GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, model->short_rate);
-        PriceSimulation* ps = gbms;
-        benchmarks.push_back(ps);
+        unsigned int num_params = model->fmodel_params[cnt].size();
+        switch (num_params)
+        {
+
+            case 0:
+            {
+                //std::cout << " [+] Using GBM" << std::endl;
+                GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, model->short_rate);
+                benchmarks.push_back(gbms);
+                break;
+            }
+
+            case 2:
+            {
+                //std::cout << " [+] Using SQRT Diffusion" << std::endl;
+                SqrtDiffusionSimulation* sqrts = new SqrtDiffusionSimulation(mean, stddev, sprice, model->fmodel_params[cnt][0], model->fmodel_params[cnt][1]);
+                benchmarks.push_back(sqrts);
+                break;
+            }
+            
+            default:
+            {
+                std::cout << " [-] Unknown model parameters, reverting to Geometric Brownian Motion model" << std::endl;
+                GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, model->short_rate);
+                benchmarks.push_back(gbms);
+                
+                break;
+            }
+        }
+
         cnt++;
     }
 }
