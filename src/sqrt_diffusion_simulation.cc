@@ -14,7 +14,7 @@ void SqrtDiffusionSimulation::run_simulation(unsigned int num_traces, unsigned i
     }
 }
 
-void SqrtDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps)
+std::vector<double> SqrtDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps)
 {
     //std::cout << " [+] Running trace: " << trace_id << std::endl;
     std::mt19937 generator(trace_id*num_steps);
@@ -37,6 +37,7 @@ void SqrtDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int
     //double ts_mean = ts.compute_mean();
     //double ts_std  = ts.compute_stddev();
     //std::cout << ts_mean << " " << ts_std << std::endl;
+    return returns;
 }
 
 TEST(SqrtDiffusionSimulation, UnitTest)

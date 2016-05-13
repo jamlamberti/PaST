@@ -45,7 +45,8 @@ void Simulator::model_benchmarks()
         double stddev = s.ts->compute_volatility();
         double sprice = s.ts->values.back();
         GBMSimulation* gbms = new GBMSimulation(mean, stddev, sprice, model->short_rate);
-        benchmarks.push_back(gbms);
+        PriceSimulation* ps = gbms;
+        benchmarks.push_back(ps);
         cnt++;
     }
 }

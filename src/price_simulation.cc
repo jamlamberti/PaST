@@ -33,6 +33,14 @@ void PriceSimulation::run_simulation(unsigned int num_traces, unsigned int num_s
     std::cout << " [-] Not implemented!" << std::endl;
 }
 
+std::vector<double> PriceSimulation::simulate_trace(unsigned int num_traces, unsigned int num_steps)
+{
+    std::cout << " [-] Not implemented! (" << mean << ", " << std_dev << ", " << starting_price << "), (" << num_traces << ", " << num_steps << ")" << std::endl;
+    std::vector<double> empty_vec;
+
+    return empty_vec;
+}
+
 TEST(PriceSimulation, UnitTest)
 {
     PriceSimulation ps(1.0, 1.5, 10);

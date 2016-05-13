@@ -12,7 +12,7 @@ class SqrtDiffusionSimulation : public PriceSimulation
 {
     protected:
         double kappa;
-        void simulate_trace(unsigned int trace_id, unsigned int num_steps);
+        //void simulate_trace(unsigned int trace_id, unsigned int num_steps);
 
     public:
         SqrtDiffusionSimulation(double mu, double sigma, double starting, double k) : PriceSimulation(mu, sigma, starting)
@@ -22,6 +22,7 @@ class SqrtDiffusionSimulation : public PriceSimulation
 
         void run_simulation();
         void run_simulation(unsigned int num_traces, unsigned int num_steps);
+        std::vector<double> simulate_trace(unsigned int, unsigned int);
 };
 
 #endif

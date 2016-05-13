@@ -19,7 +19,7 @@
 class Simulator
 {
     ModelLoader* model;
-    std::vector<GBMSimulation*> benchmarks;
+    std::vector<PriceSimulation*> benchmarks;
     double port_worth;
     std::vector<GBMWeighted*> weighted_sims;
     
