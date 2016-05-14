@@ -107,6 +107,34 @@ bool ModelLoader::load_model(std::string model_file)
         return false;
     }
 
+    try
+    {
+        const libconfig::Setting &st_models = root["stockmodels"];
+        std::cerr << "HERE!" << std::endl;
+        if (st_models.getLength() != num_stocks)
+        {
+            std::cerr << "stockmodels must have the same size as Stocks" << std::endl;
+            return false;
+        }
+
+        for (int i = 0; i < num_stocks; i++)
+        {
+            // Load in each factor model
+            const libconfig::Setting &model_factor = st_models[i];
+            std::vector<double> model_params;
+            for (int j = 0; j < model_factor.getLength(); j++)
+            {
+                model_params.emplace_back((double)model_factor[j]);
+            }
+            smodel_params.emplace_back(model_params);
+        }
+
+    } catch (const libconfig::SettingNotFoundException &nfex)
+    {
+        std::cerr << "StockModels must be defined in the model" << std::endl;
+        return false;
+    }
+
 
     try
     {

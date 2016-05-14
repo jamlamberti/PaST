@@ -16,6 +16,8 @@
 #include "gbm_weighted.h"
 #include "sqrt_diffusion_simulation.h"
 #include "jump_diffusion_simulation.h"
+#include "sqrt_diffusion_weighted.h"
+#include "jump_diffusion_weighted.h"
 #include "risk_measures.h"
 
 class Simulator
@@ -23,7 +25,7 @@ class Simulator
     ModelLoader* model;
     std::vector<PriceSimulation*> benchmarks;
     double port_worth;
-    std::vector<GBMWeighted*> weighted_sims;
+    std::vector<PriceSimulation*> weighted_sims;
     
     public:
         Simulator(ModelLoader*);

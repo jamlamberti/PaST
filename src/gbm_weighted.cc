@@ -26,7 +26,7 @@ std::vector<double> GBMWeighted::simulate_trace(unsigned int trace_id, std::vect
 
     double prev = starting_price;
     double curr;
-    double dt = 1.0/num_steps;
+    double dt = 1.0; // 1.0/num_steps;
     double variance = pow(std_dev, 2);
 
     // prices.push_back(prev);

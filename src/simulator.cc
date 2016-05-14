@@ -29,6 +29,27 @@ void Simulator::model_benchmarks()
     {
         Stock s = Stock(*it, model->stock_files.at(cnt));
         port_worth += model->stock_allocations.at(cnt)*s.ts->values.back();
+        switch(model->smodel_params[cnt].size())
+        {
+            case 1:
+            {
+                GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->short_rate, model->smodel_params[cnt][0]);
+                weighted_sims.push_back(gbmw);
+            }
+
+            case 3:
+            {
+                SqrtDiffusionWeighted* sqrtw = new SqrtDiffusionWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->smodel_params[cnt][0], model->smodel_params[cnt][1], model->smodel_params[cnt][2]);
+                weighted_sims.push_back(sqrtw);
+            }
+
+            case 4:
+            {
+
+                JumpDiffusionWeighted* jumpw = new JumpDiffusionWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->smodel_params[cnt][0], model->smodel_params[cnt][1], model->smodel_params[cnt][2], model->smodel_params[cnt][3]);
+                weighted_sims.push_back(jumpw);
+            }
+        }
         GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->short_rate, 0.5);
         weighted_sims.push_back(gbmw);
         cnt++;
