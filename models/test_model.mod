@@ -4,6 +4,7 @@ allocations = [100.25, 20.75];
 factors = ["10_year_treasury_maturity", "Real_Median_Household_Income", "Smoothed_US_Recession_Probabilities", "adjusted_unemployment_rate", "sp_500", "wti_spot_prices"];
 factorfiles = ["models/10_year_treasury_maturity.dat", "models/Real_Median_Household_Income.dat", "models/Smoothed_US_Recession_Probabilities.dat", "models/adjusted_unemployment_rate.dat", "models/sp_500.dat", "models/wti_spot_prices.dat"];
 factormodels = ([], [], [], [], [], []);
+stockmodels = ([0.5], [0.5]);
 WMT = [-9.412849, -0.000000, -0.338669, 34.200424, -0.001371, -0.140842, -79.565140];
 XOM = [-11.753494, -0.000000, 1.935814, 4.311219, 0.028620, 0.345938, 4.378247];
 numtraces = 1000;

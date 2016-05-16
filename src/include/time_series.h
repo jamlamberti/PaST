@@ -21,6 +21,7 @@ class TimeSeries
         void add_data(double);
         void extend(std::vector<double> vals);
         double compute_mean();
+        double compute_mean_parallel();
         double compute_stddev();
         double compute_stddev(int);
         double compute_volatility();

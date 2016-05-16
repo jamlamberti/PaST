@@ -31,6 +31,17 @@ void TimeSeries::extend(std::vector<double> vals)
 
 double TimeSeries::compute_mean()
 {
+    double sum = 0.0;
+    for (auto i = values.begin(); i < values.cend(); i++)
+    {
+        sum += *i;
+    }
+    mean = sum/values.size();
+    return mean;
+}
+
+double TimeSeries::compute_mean_parallel()
+{
     cilk::reducer< cilk::op_add<double> > parallel_sum(0.0);
     auto end = values.end();
     cilk_for(auto i = values.begin(); i < end; i++)

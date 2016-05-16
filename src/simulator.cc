@@ -29,29 +29,30 @@ void Simulator::model_benchmarks()
     {
         Stock s = Stock(*it, model->stock_files.at(cnt));
         port_worth += model->stock_allocations.at(cnt)*s.ts->values.back();
+        double mean = s.ts->compute_mean_parallel();
+        double vol = s.ts->compute_volatility();
+        double starting = s.ts->values.back();
         switch(model->smodel_params[cnt].size())
         {
             case 1:
             {
-                GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->short_rate, model->smodel_params[cnt][0]);
+                GBMWeighted* gbmw = new GBMWeighted(mean, vol, starting, model->short_rate, model->smodel_params[cnt][0]);
                 weighted_sims.push_back(gbmw);
             }
 
             case 3:
             {
-                SqrtDiffusionWeighted* sqrtw = new SqrtDiffusionWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->smodel_params[cnt][0], model->smodel_params[cnt][1], model->smodel_params[cnt][2]);
+                SqrtDiffusionWeighted* sqrtw = new SqrtDiffusionWeighted(mean, vol, starting, model->smodel_params[cnt][0], model->smodel_params[cnt][1], model->smodel_params[cnt][2]);
                 weighted_sims.push_back(sqrtw);
             }
 
             case 4:
             {
 
-                JumpDiffusionWeighted* jumpw = new JumpDiffusionWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->smodel_params[cnt][0], model->smodel_params[cnt][1], model->smodel_params[cnt][2], model->smodel_params[cnt][3]);
+                JumpDiffusionWeighted* jumpw = new JumpDiffusionWeighted(mean, vol, starting, model->smodel_params[cnt][0], model->smodel_params[cnt][1], model->smodel_params[cnt][2], model->smodel_params[cnt][3]);
                 weighted_sims.push_back(jumpw);
             }
         }
-        GBMWeighted* gbmw = new GBMWeighted(s.ts->compute_mean(), s.ts->compute_volatility(), s.ts->values.back(), model->short_rate, 0.5);
-        weighted_sims.push_back(gbmw);
         cnt++;
     }
 
@@ -62,7 +63,7 @@ void Simulator::model_benchmarks()
     for (auto it = model->factors.begin(); it != model->factors.cend(); it++)
     {
         Stock s = Stock(*it, model->factor_files.at(cnt));
-        double mean = s.ts->compute_mean();
+        double mean = s.ts->compute_mean_parallel();
         double stddev = s.ts->compute_volatility();
         double sprice = s.ts->values.back();
         unsigned int num_params = model->fmodel_params[cnt].size();
@@ -206,7 +207,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
     delete[] drawdowns;
     TimeSeries ts(vec);
     RiskMeasures rm(ts);
-    std::cout << "Mean:    " << ts.compute_mean() << std::endl;
+    std::cout << "Mean:    " << ts.compute_mean_parallel() << std::endl;
     std::cout << "Stddev:  " << ts.compute_stddev() << std::endl;
     std::cout << "95% VaR: " << rm.value_at_risk(95, port_worth) << std::endl;
     std::cout << "99% VaR: " << rm.value_at_risk(99, port_worth) << std::endl;

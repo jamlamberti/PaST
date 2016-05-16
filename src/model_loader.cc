@@ -110,7 +110,6 @@ bool ModelLoader::load_model(std::string model_file)
     try
     {
         const libconfig::Setting &st_models = root["stockmodels"];
-        std::cerr << "HERE!" << std::endl;
         if (st_models.getLength() != num_stocks)
         {
             std::cerr << "stockmodels must have the same size as Stocks" << std::endl;
