@@ -14,7 +14,7 @@ void SqrtDiffusionWeighted::run_simulation(unsigned int num_traces, unsigned int
     }
 }
 
-std::vector<double> SqrtDiffusionWeighted::simulate_trace(unsigned int trace_id, std::vector<double>* model_prices)
+void SqrtDiffusionWeighted::simulate_trace(unsigned int trace_id, std::vector<double>* model_prices)
 {
     unsigned int num_steps = model_prices->size();
     std::mt19937 generator(trace_id*num_steps);
@@ -35,7 +35,6 @@ std::vector<double> SqrtDiffusionWeighted::simulate_trace(unsigned int trace_id,
         prev = curr;
     }
 
-    return *model_prices;
 }
 
 TEST(SqrtDiffusionWeighted, UnitTest)

@@ -24,7 +24,7 @@ class GBMWeighted : public PriceSimulation
 
         void run_simulation();
         void run_simulation(unsigned int num_traces, std::vector<double>* model_prices);
-        std::vector<double> simulate_trace(unsigned int trace_id, std::vector<double>* model_prices);
+        void simulate_trace(unsigned int trace_id, std::vector<double>* model_prices);
         
 };
 

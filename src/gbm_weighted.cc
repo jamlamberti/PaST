@@ -14,7 +14,7 @@ void GBMWeighted::run_simulation(unsigned int num_traces, std::vector<double>* m
     }
 }
 
-std::vector<double> GBMWeighted::simulate_trace(unsigned int trace_id, std::vector<double>* model_prices)
+void GBMWeighted::simulate_trace(unsigned int trace_id, std::vector<double>* model_prices)
 {
     //std::cout << " [+] Running trace: " << trace_id << std::endl;
     unsigned int num_steps = model_prices->size();
@@ -38,7 +38,6 @@ std::vector<double> GBMWeighted::simulate_trace(unsigned int trace_id, std::vect
         (*model_prices)[i-1] = curr;
         prev = curr;
     }
-    return *model_prices;
 }
 
 TEST(GBMWeighted, UnitTest)

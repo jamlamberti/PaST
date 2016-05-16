@@ -41,11 +41,9 @@ std::vector<double> PriceSimulation::simulate_trace(unsigned int num_traces, uns
     return empty_vec;
 }
 
-std::vector<double> PriceSimulation::simulate_trace(unsigned int num_traces, std::vector<double>* model_prices)
+void PriceSimulation::simulate_trace(unsigned int num_traces, std::vector<double>* model_prices)
 {
     std::cout << " [-] Not implemented!" << std::endl;
-
-    return *model_prices;
 }
 
 TEST(PriceSimulation, UnitTest)
