@@ -5,5 +5,6 @@
 #include "model_loader.h"
 #include "simulator.h"
 #include "gtest/gtest.h"
-typedef std::chrono::milliseconds timing;
+typedef std::chrono::nanoseconds timing;
+//typedef std::chrono::milliseconds timing;
 #endif

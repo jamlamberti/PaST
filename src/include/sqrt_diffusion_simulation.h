@@ -24,7 +24,7 @@ class SqrtDiffusionSimulation : public PriceSimulation
 
         void run_simulation();
         void run_simulation(unsigned int num_traces, unsigned int num_steps);
-        std::vector<double> simulate_trace(unsigned int, unsigned int);
+        void simulate_trace(unsigned int, unsigned int, double*);
 };
 
 #endif

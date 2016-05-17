@@ -33,12 +33,9 @@ void PriceSimulation::run_simulation(unsigned int num_traces, unsigned int num_s
     std::cout << " [-] Not implemented!" << std::endl;
 }
 
-std::vector<double> PriceSimulation::simulate_trace(unsigned int num_traces, unsigned int num_steps)
+void PriceSimulation::simulate_trace(unsigned int num_traces, unsigned int num_steps, double* vec)
 {
     std::cout << " [-] Not implemented!" << std::endl;
-    std::vector<double> empty_vec;
-
-    return empty_vec;
 }
 
 void PriceSimulation::simulate_trace(unsigned int num_traces, std::vector<double>* model_prices)

@@ -118,9 +118,23 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
     std::cout << " [+] Running with " << __cilkrts_get_nworkers() << " threads" << std::endl;
     double* final_prices = new double[num_traces];
     double* drawdowns = new double[num_traces];
-    unsigned int chunk_size = 4;
+    unsigned int chunk_size = 8;
     cilk_for(unsigned int chunk_iters = 0; chunk_iters < num_traces; chunk_iters+=chunk_size)
     {
+        
+        std::vector<std::vector<double>> prices;
+
+        std::vector<double> curr;
+        for (unsigned int j = 0; j < model->stocks.size(); j++)
+        {
+            curr.clear();
+            for (unsigned int i = 0; i < num_steps; i++)
+            {
+                curr.emplace_back(model->factor_models[j].back());
+            }
+            prices.push_back(curr);
+        }
+        double* benchmark = new double[num_steps];
         for (unsigned int iter_cnt = 0; iter_cnt < chunk_size; iter_cnt++)
         {
             unsigned int iter = iter_cnt + chunk_iters;
@@ -128,24 +142,11 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
 
             // std::vector<double>portfolio_prices;
             // simulate over each of the benchmark vector elements
-            std::vector<std::vector<double>> prices;
-
-            std::vector<double> curr;
-            for (unsigned int j = 0; j < model->stocks.size(); j++)
-            {
-                curr.clear();
-                for (unsigned int i = 0; i < num_steps; i++)
-                {
-                    curr.emplace_back(model->factor_models[j].back());
-                }
-                prices.push_back(curr);
-            }
 
             int cnt = 0;
-
             for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
             {
-                std::vector<double> benchmark = (*it)->simulate_trace(iter*(cnt+2) + cnt, num_steps);
+                (*it)->simulate_trace(iter*(cnt+2) + cnt, num_steps, benchmark);
                 for (unsigned int j = 0; j < prices.size(); j++)
                 {
                     for (unsigned int i = 0; i < num_steps; i++)
@@ -191,6 +192,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             final_prices[iter] = curr_price;
             drawdowns[iter] = mdd;
         }
+        delete[] benchmark;
     }
     std::vector<double> vec(final_prices, final_prices+num_traces);
     delete[] final_prices;

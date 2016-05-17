@@ -16,7 +16,7 @@ class PriceSimulation
         virtual ~PriceSimulation();
         void run_simulation();
         void run_simulation(unsigned int num_traces, unsigned int num_steps);
-        virtual std::vector<double> simulate_trace(unsigned int, unsigned int);
+        virtual void simulate_trace(unsigned int, unsigned int, double*);
         virtual void simulate_trace(unsigned int, std::vector<double>*);
 };
 #endif
