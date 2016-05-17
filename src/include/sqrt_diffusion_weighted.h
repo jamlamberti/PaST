@@ -26,7 +26,7 @@ class SqrtDiffusionWeighted : public PriceSimulation
 
         void run_simulation();
         void run_simulation(unsigned int num_traces, unsigned int num_steps);
-        void simulate_trace(unsigned int, std::vector<double>*);
+        void simulate_trace(unsigned int, std::vector<double>*, std::mt19937*);
 };
 
 #endif

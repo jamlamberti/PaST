@@ -33,12 +33,12 @@ void PriceSimulation::run_simulation(unsigned int num_traces, unsigned int num_s
     std::cout << " [-] Not implemented!" << std::endl;
 }
 
-void PriceSimulation::simulate_trace(unsigned int num_traces, unsigned int num_steps, double* vec)
+void PriceSimulation::simulate_trace(unsigned int num_traces, unsigned int num_steps, double* vec, std::mt19937* generator)
 {
     std::cout << " [-] Not implemented!" << std::endl;
 }
 
-void PriceSimulation::simulate_trace(unsigned int num_traces, std::vector<double>* model_prices)
+void PriceSimulation::simulate_trace(unsigned int num_traces, std::vector<double>* model_prices, std::mt19937* generator)
 {
     std::cout << " [-] Not implemented!" << std::endl;
 }

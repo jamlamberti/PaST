@@ -14,9 +14,9 @@ void JumpDiffusionSimulation::run_simulation(unsigned int num_traces, unsigned i
     }
 }
 
-void JumpDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps, double* prices)
+void JumpDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps, double* prices, std::mt19937* generator)
 {
-    std::mt19937 generator(trace_id*num_steps);
+    //std::mt19937 generator(trace_id*num_steps);
     std::normal_distribution<> normal(0, 1);
     //std::vector<double> prices;
 
@@ -32,7 +32,7 @@ void JumpDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int
     for (unsigned int i = 1; i < num_steps; i++)
     {
         //curr = fmax(prev + riskless_sr*(delta - prev)*dt + std_dev * sqrt(dt*prev)*normal(generator), 0.0);
-        curr = fmax(prev*exp(dt*(riskless_sr - jump_correction - 0.5*variance) + std_dev*sqrt(dt)*normal(generator)) + (exp(mean + delta + normal(generator))-1)*poisson(generator), 0.0);
+        curr = fmax(prev*exp(dt*(riskless_sr - jump_correction - 0.5*variance) + std_dev*sqrt(dt)*normal(*generator)) + (exp(mean + delta + normal(*generator))-1)*poisson(*generator), 0.0);
         prices[i] = curr;
         prev = curr;
     }

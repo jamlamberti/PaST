@@ -121,9 +121,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
     unsigned int chunk_size = 8;
     cilk_for(unsigned int chunk_iters = 0; chunk_iters < num_traces; chunk_iters+=chunk_size)
     {
-        
         std::vector<std::vector<double>> prices;
-
         std::vector<double> curr;
         for (unsigned int j = 0; j < model->stocks.size(); j++)
         {
@@ -135,18 +133,20 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             prices.push_back(curr);
         }
         double* benchmark = new double[num_steps];
+        std::mt19937 generator(chunk_iters);
         for (unsigned int iter_cnt = 0; iter_cnt < chunk_size; iter_cnt++)
         {
             unsigned int iter = iter_cnt + chunk_iters;
             if (iter >= num_traces) break;
-
+            if (!iter_cnt)
+                generator.seed(iter);
             // std::vector<double>portfolio_prices;
             // simulate over each of the benchmark vector elements
 
             int cnt = 0;
             for (auto it = benchmarks.begin(); it != benchmarks.cend(); it++)
             {
-                (*it)->simulate_trace(iter*(cnt+2) + cnt, num_steps, benchmark);
+                (*it)->simulate_trace(iter*(cnt+2) + cnt, num_steps, benchmark, &generator);
                 for (unsigned int j = 0; j < prices.size(); j++)
                 {
                     for (unsigned int i = 0; i < num_steps; i++)
@@ -159,7 +159,7 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             
             for (unsigned int j = 0; j < prices.size(); j++)
             {
-                weighted_sims[j]->simulate_trace(iter*(cnt+1), &(prices[j]));
+                weighted_sims[j]->simulate_trace(iter*(cnt+1), &(prices[j]), &generator);
                 // weighted_sims[j] = updated;
             }
 

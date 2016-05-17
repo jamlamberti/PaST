@@ -14,10 +14,10 @@ void JumpDiffusionWeighted::run_simulation(unsigned int num_traces, unsigned int
     }
 }
 
-void JumpDiffusionWeighted::simulate_trace(unsigned int trace_id, std::vector<double>* model_prices)
+void JumpDiffusionWeighted::simulate_trace(unsigned int trace_id, std::vector<double>* model_prices, std::mt19937* generator)
 {
     unsigned int num_steps = model_prices->size();
-    std::mt19937 generator(trace_id*num_steps);
+    //std::mt19937 generator(trace_id*num_steps);
     std::normal_distribution<> normal(0, 1);
 
     double prev = starting_price;
@@ -29,7 +29,7 @@ void JumpDiffusionWeighted::simulate_trace(unsigned int trace_id, std::vector<do
 
     for (unsigned int i = 1; i < num_steps; i++)
     {
-        curr = fmax(prev*exp(dt*(riskless_sr - jump_correction - 0.5*variance) + std_dev*sqrt(dt)*normal(generator)) + (exp(mean + delta + normal(generator))-1)*poisson(generator), 0.0);
+        curr = fmax(prev*exp(dt*(riskless_sr - jump_correction - 0.5*variance) + std_dev*sqrt(dt)*normal(*generator)) + (exp(mean + delta + normal(*generator))-1)*poisson(*generator), 0.0);
         curr = (curr*model_weight) + (1-model_weight)*model_prices->at(i);
         model_prices->at(i) = curr;
         prev = curr;

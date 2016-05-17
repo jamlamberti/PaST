@@ -14,10 +14,10 @@ void SqrtDiffusionSimulation::run_simulation(unsigned int num_traces, unsigned i
     }
 }
 
-void SqrtDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps, double* prices)
+void SqrtDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps, double* prices, std::mt19937* generator)
 {
     //std::cout << " [+] Running trace: " << trace_id << std::endl;
-    std::mt19937 generator(trace_id*num_steps);
+    //std::mt19937 generator(trace_id*num_steps);
     std::normal_distribution<> normal(0, 1);
 
     //std::vector<double> prices;
@@ -31,7 +31,7 @@ void SqrtDiffusionSimulation::simulate_trace(unsigned int trace_id, unsigned int
 
     for (unsigned int i = 1; i < num_steps; i++)
     {
-        curr = prev + kappa*(long_term_mean - fmax(prev, 0.0))*dt + std_dev * sqrt(dt*fmax(prev, 0.0))*normal(generator);
+        curr = prev + kappa*(long_term_mean - fmax(prev, 0.0))*dt + std_dev * sqrt(dt*fmax(prev, 0.0))*normal(*generator);
         // returns.push_back(curr/fmax(prev, 0.0));
         prices[i] = fmax(curr, 0.0);
         prev = curr;

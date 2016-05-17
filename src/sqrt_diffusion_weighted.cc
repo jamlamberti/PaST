@@ -14,10 +14,10 @@ void SqrtDiffusionWeighted::run_simulation(unsigned int num_traces, unsigned int
     }
 }
 
-void SqrtDiffusionWeighted::simulate_trace(unsigned int trace_id, std::vector<double>* model_prices)
+void SqrtDiffusionWeighted::simulate_trace(unsigned int trace_id, std::vector<double>* model_prices, std::mt19937* generator)
 {
     unsigned int num_steps = model_prices->size();
-    std::mt19937 generator(trace_id*num_steps);
+    //std::mt19937 generator(trace_id*num_steps);
     std::normal_distribution<> normal(0, 1);
 
 
@@ -29,7 +29,7 @@ void SqrtDiffusionWeighted::simulate_trace(unsigned int trace_id, std::vector<do
 
     for (unsigned int i = 1; i < num_steps; i++)
     {
-        curr = prev + kappa*(long_term_mean - fmax(prev, 0.0))*dt + std_dev * sqrt(dt*fmax(prev, 0.0))*normal(generator);
+        curr = prev + kappa*(long_term_mean - fmax(prev, 0.0))*dt + std_dev * sqrt(dt*fmax(prev, 0.0))*normal(*generator);
         curr = (curr*model_weight + (1-model_weight)*model_prices->at(i));
         model_prices->at(i) = fmax(curr, 0.0);
         prev = curr;

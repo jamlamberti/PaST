@@ -14,10 +14,10 @@ void GBMSimulation::run_simulation(unsigned int num_traces, unsigned int num_ste
     }
 }
 
-void GBMSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps, double* prices)
+void GBMSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps, double* prices, std::mt19937* generator)
 {
     //std::cout << " [+] Running trace: " << trace_id << std::endl;
-    std::mt19937 generator(trace_id*num_steps);
+    //std::mt19937 generator(trace_id*num_steps);
     std::normal_distribution<> normal(0, 1);
 
     //std::vector<double> returns;
@@ -31,7 +31,7 @@ void GBMSimulation::simulate_trace(unsigned int trace_id, unsigned int num_steps
     prices[0] = prev;
     for (unsigned int i = 1; i < num_steps; i++)
     {
-        curr = prev*exp((short_rate - 0.5*variance)*dt + std_dev*sqrt(dt)*normal(generator));
+        curr = prev*exp((short_rate - 0.5*variance)*dt + std_dev*sqrt(dt)*normal(*generator));
         //returns.push_back(curr/prev);
         //prices.push_back(curr);
         prices[i] = curr;

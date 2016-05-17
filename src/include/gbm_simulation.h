@@ -21,7 +21,7 @@ class GBMSimulation : public PriceSimulation
 
         void run_simulation();
         void run_simulation(unsigned int num_traces, unsigned int num_steps);
-        void simulate_trace(unsigned int trace_id, unsigned int num_steps, double* prices);
+        void simulate_trace(unsigned int trace_id, unsigned int num_steps, double* prices, std::mt19937* generator);
 };
 
 #endif
