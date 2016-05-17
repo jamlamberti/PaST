@@ -21,6 +21,7 @@ Simulator::~Simulator()
 void Simulator::model_benchmarks()
 {
     benchmarks.clear();
+    weighted_sims.clear();
     // push onto benchmarks vector
     int cnt = 0;
     port_worth = 0.0;
@@ -114,8 +115,6 @@ void Simulator::simulate_benchmarks()
 
 void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_steps)
 {
-    // TODO: instead of relying solely of factor models,
-    // it should be a weighting between the factor model and a GBM sim
     std::cout << " [+] Running with " << __cilkrts_get_nworkers() << " threads" << std::endl;
     double* final_prices = new double[num_traces];
     double* drawdowns = new double[num_traces];
@@ -131,9 +130,10 @@ void Simulator::simulate_benchmarks(unsigned int num_traces, unsigned int num_st
             // simulate over each of the benchmark vector elements
             std::vector<std::vector<double>> prices;
 
+            std::vector<double> curr;
             for (unsigned int j = 0; j < model->stocks.size(); j++)
             {
-                std::vector<double> curr;
+                curr.clear();
                 for (unsigned int i = 0; i < num_steps; i++)
                 {
                     curr.emplace_back(model->factor_models[j].back());
