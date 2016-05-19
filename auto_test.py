@@ -6,7 +6,10 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 import subprocess
-def call_past(model_file):
+def call_past(model_file, scale_alloc=True):
+    cmd = ['./bin/main', os.path.abspath(model_file)]
+    if scale_alloc:
+        cmd = ['LD_PRELOAD=/home/jlamberti/os_repos/Hoard/src/libhoard.so'] + cmd
     p = subprocess.Popen(['./bin/main', os.path.abspath(model_file)], stdout=subprocess.PIPE, stdin=subprocess.PIPE)
     out, err = p.communicate()
     return out.strip().split('\n')[-1].strip().split()[0]
@@ -16,8 +19,8 @@ new_model = 'models/exp.mod'
 threads = [1, 2, 3, 4]
 #steps = [5, 10, 25, 100, 500, 1000]
 #traces = [5, 10, 25, 100, 250, 500, 1000, 5000, 10000]
-steps = [100*cnt for cnt in range(1, 21)]
-traces = [100*cnt for cnt in range(1, 21)]
+steps = [250*cnt for cnt in range(1, 5)]
+traces = [250*cnt for cnt in range(1, 5)]
 iters = 5
 model = []
 with open(model_file, 'r') as f:
