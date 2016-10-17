@@ -1,10 +1,10 @@
 language: C++
 
 before_install:
-    - sudo apt-get install build-essential cppcheck git lcov -y
+    - sudo apt-get install build-essential cppcheck git -y
     - sudo add-apt-repository ppa:ubuntu-toolchain-r/test -y
     - sudo apt-get update -q
-    - sudo apt-get install gcc-5 g++-5 -y
+    - sudo apt-get install gcc-5 g++-5 gcov-5 lcov -y
     - ./install_gtest.sh
     - ./install_libconfig.sh
     - gem install coveralls-lcov
@@ -13,6 +13,7 @@ before_install:
     - gcc -v
     - g++ -v
     - lcov -v
+    - apt-get search 
 
 script:
     - python model_gen/regression_analysis.py
