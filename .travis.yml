@@ -29,9 +29,4 @@ after_failure:
 
 after_success:
     - cppcheck src/ --error-exitcode=1
-    - du -h bin/*
     - coveralls --exclude /usr/ --exclude googletest/ --gcov $(which gcov-5) --gcov-options '\-lp'
-      #- lcov --directory . --gcov-tool=$(which gcov-5) --capture --output-file coverage.info
-      #- lcov --remove coverage.info '/usr/*' 'googletest/*' --output-file coverage.info
-      #- lcov --list coverage.info
-      #- coveralls-lcov coverage.info
