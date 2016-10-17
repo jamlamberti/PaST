@@ -29,8 +29,8 @@ after_failure:
 
 after_success:
     - cppcheck src/ --error-exitcode=1
-    - find -name '*.cc' -exec gcov {} +
-    - find -name '*.h' -exec gcov {} +
+    - find -name '*.cc' -exec gcov-5 {} +
+    - find -name '*.h' -exec gcov-5 {} +
     - ls
     - lcov --directory . --capture --output-file coverage.info
     - lcov --remove coverage.info '/usr/*' 'googletest/*' --output-file coverage.info
