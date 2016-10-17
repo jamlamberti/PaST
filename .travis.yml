@@ -14,7 +14,6 @@ before_install:
     - g++ -v
     - gcov -v
     - lcov -v
-    - apt-get search 
 
 script:
     - python model_gen/regression_analysis.py
