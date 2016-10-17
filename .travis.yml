@@ -9,7 +9,7 @@ before_install:
     - ./install_libconfig.sh
     - gem install coveralls-lcov
     - sudo apt-get install python-sklearn python-numpy
-    - sudo pip install yahoo_finance
+    - sudo -H pip install yahoo_finance
     - gcc -v
     - g++ -v
     - lcov -v
