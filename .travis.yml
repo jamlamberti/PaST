@@ -12,7 +12,7 @@ before_install:
     - sudo -H pip install yahoo_finance
     - gcc -v
     - g++ -v
-    - gcov -v
+    - gcov-5 -v
     - lcov -v
 
 script:
