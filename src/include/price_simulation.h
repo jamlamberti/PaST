@@ -1,6 +1,7 @@
 #ifndef PAST_PRICE_SIMULATION_H_
 #define PAST_PRICE_SIMULATION_H_
 #include <iostream>
+#include <random>
 #include <vector>
 #include <gtest/gtest.h>
 class PriceSimulation
