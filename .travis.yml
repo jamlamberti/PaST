@@ -10,6 +10,9 @@ before_install:
     - gem install coveralls-lcov
     - sudo apt-get install python-sklearn python-numpy
     - sudo pip install yahoo_finance
+    - gcc -v
+    - g++ -v
+    - lcov -v
 
 script:
     - python model_gen/regression_analysis.py
