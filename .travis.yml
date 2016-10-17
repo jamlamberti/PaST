@@ -9,7 +9,7 @@ before_install:
     - ./install_libconfig.sh
     - gem install coveralls-lcov
     - sudo apt-get install python-sklearn python-numpy
-    - sudo -H pip install yahoo_finance
+    - sudo -H pip install yahoo_finance cpp-coveralls
     - gcc-5 -v
     - g++-5 -v
     - gcov-5 -v
@@ -29,8 +29,9 @@ after_failure:
 
 after_success:
     - cppcheck src/ --error-exitcode=1
-    - du -h bin/
-    - lcov --directory . --gcov-tool=$(which gcov-5) --capture --output-file coverage.info
-    - lcov --remove coverage.info '/usr/*' 'googletest/*' --output-file coverage.info
-    - lcov --list coverage.info
-    - coveralls-lcov coverage.info
+    - du -h bin/*
+    - coveralls --exclude /usr/ --exclude googletest/ --gcov-options '\-lp'
+      #- lcov --directory . --gcov-tool=$(which gcov-5) --capture --output-file coverage.info
+      #- lcov --remove coverage.info '/usr/*' 'googletest/*' --output-file coverage.info
+      #- lcov --list coverage.info
+      #- coveralls-lcov coverage.info
